@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- UI palette (ARCHITECTURE.md §6). -->
+    <color name="taraang_orange">#FF6A13</color>
+    <color name="taraang_white">#FFFFFF</color>
+    <color name="taraang_graphite">#2E3135</color>
+    <color name="taraang_graphite_2">#5B6067</color>
+    <color name="taraang_gray_bg">#F2F3F5</color>
+    <!-- Warnings only; not a brand color. -->
+    <color name="taraang_red">#D93025</color>
+
+    <!-- Colors measured from the official logo (brand/BRAND.md); the logo drawables use these. -->
+    <color name="taraang_logo_orange">#F06519</color>
+    <color name="taraang_logo_graphite">#31383F</color>
+
+    <color name="ic_launcher_background">#FFFFFF</color>
+</resources>

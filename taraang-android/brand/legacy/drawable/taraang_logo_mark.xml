@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Taraang logo mark: open course loop + rider dot, orange. Source: brand/ (generated from shared geometry). -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+    <path
+        android:pathData="M38.943,22.693A15,15 0 1,1 25.307,9.057"
+        android:strokeColor="#FF6A13"
+        android:strokeWidth="7"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round" />
+    <path
+        android:pathData="M30.007,13.393A4.6,4.6 0 1,1 39.207,13.393A4.6,4.6 0 1,1 30.007,13.393Z"
+        android:fillColor="#FF6A13" />
+</vector>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.Taraang" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:colorPrimary">@color/taraang_orange</item>
+        <item name="android:colorAccent">@color/taraang_orange</item>
+        <item name="android:textColorPrimary">@color/taraang_graphite</item>
+        <item name="android:textColorSecondary">@color/taraang_graphite_2</item>
+        <item name="android:windowBackground">@color/taraang_white</item>
+        <item name="android:statusBarColor">@color/taraang_white</item>
+        <item name="android:navigationBarColor">@color/taraang_white</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightNavigationBar">true</item>
+    </style>
+
+    <!-- System splash (core-splashscreen): icon only; the app then shows taraang_splash_lockup on white. -->
+    <style name="Theme.Taraang.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/taraang_white</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/brand_splash_icon</item>
+        <item name="postSplashScreenTheme">@style/Theme.Taraang</item>
+    </style>
+
+</resources>

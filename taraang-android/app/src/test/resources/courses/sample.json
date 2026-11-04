@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "origin": {"lat": 35.2310, "lon": 129.0840},
+  "generatedAt": "2026-10-22T08:00:00Z",
+  "dataNotes": ["신호 정보가 없는 좌회전은 비보호로 간주했습니다"],
+  "futureField": {"ignored": true},
+  "courses": [
+    {
+      "id": "L1-35.2310-129.0840-s3",
+      "level": 1,
+      "title": "부산대 앞 우회전 순환",
+      "distanceM": 1356,
+      "path": [[35.2310, 129.0840], [35.2312, 129.0843], [35.2315], [35.2320, 129.0850]],
+      "waypoints": [[35.2321, 129.0851], [35.2330, 129.0860]],
+      "maneuvers": [
+        {"index": 0, "skill": "RIGHT_TURN", "street": "금정로", "lat": 35.2312, "lon": 129.0843,
+         "distanceFromStartM": 120.5, "confidence": "VERIFIED"},
+        {"index": 1, "skill": "HOVER_JUMP", "street": "미래로", "lat": 35.2315, "lon": 129.0846,
+         "distanceFromStartM": 300.0, "confidence": "VERIFIED"},
+        {"index": 2, "skill": "LEFT_TURN_UNKNOWN", "street": "부산대학로", "lat": 35.2320, "lon": 129.0850,
+         "distanceFromStartM": 610.0, "confidence": "SOMETHING_NEW", "extra": 1}
+      ],
+      "skillCounts": {"RIGHT_TURN": 1, "LEFT_TURN_UNKNOWN": 1, "HOVER_JUMP": 1},
+      "warnings": ["신호 정보 없는 좌회전 1곳 — 출발 전 확인"]
+    },
+    {
+      "id": "L2-35.2310-129.0840-s7",
+      "level": 2,
+      "title": "신호 좌회전 연습",
+      "distanceM": 2100,
+      "path": [[35.2310, 129.0840], [35.2340, 129.0870]],
+      "waypoints": [],
+      "maneuvers": [],
+      "skillCounts": {},
+      "warnings": []
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- release: 평문 HTTP 전면 금지. 개발 서버(10.0.2.2, localhost) 예외는 src/debug의 같은 이름 파일에만 있다. -->
+<network-security-config>
+    <base-config cleartextTrafficPermitted="false" />
+</network-security-config>

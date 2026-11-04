@@ -1,0 +1,2254 @@
+{
+ "schemaVersion": 1,
+ "origin": {
+  "lat": 35.231,
+  "lon": 129.084
+ },
+ "generatedAt": "2026-10-22T18:22:07Z",
+ "dataNotes": [
+  "신호등 정보가 없는 좌회전은 어려운 쪽으로 보고 골랐어요",
+  "1·2·3단계 조건에 딱 맞는 코스가 없어 가장 가까운 코스를 골랐어요",
+  "어린이보호구역은 학교·유치원 등 시설 주변 150m로 어림한 범위예요",
+  "신호 데이터: 부산광역시, 공공데이터포털(data.go.kr)",
+  "보호구역·사고다발지역: 공공데이터포털(data.go.kr) 전국어린이보호구역·노인장애인보호구역·교통사고다발지역 표준데이터",
+  "차로 수·제한속도: 국토교통부 국가교통정보센터 표준노드링크(2026-10-14), 공공데이터포털(data.go.kr)",
+  "도로 데이터 © OpenStreetMap contributors (ODbL)"
+ ],
+ "courses": [
+  {
+   "id": "L1-35.2310-129.0840-s3-a6db7f1d",
+   "level": 1,
+   "title": "부산대 앞 금강로·부산대학로63번길 좌·우회전 순환 1.4km",
+   "distanceM": 1356,
+   "path": [
+    [
+     35.230986,
+     129.084092
+    ],
+    [
+     35.231591,
+     129.084233
+    ],
+    [
+     35.232511,
+     129.084478
+    ],
+    [
+     35.232559,
+     129.084527
+    ],
+    [
+     35.233345,
+     129.084741
+    ],
+    [
+     35.233297,
+     129.084902
+    ],
+    [
+     35.235615,
+     129.085507
+    ],
+    [
+     35.235493,
+     129.08621
+    ],
+    [
+     35.233066,
+     129.085573
+    ],
+    [
+     35.232365,
+     129.085378
+    ],
+    [
+     35.230237,
+     129.084811
+    ],
+    [
+     35.230372,
+     129.084023
+    ],
+    [
+     35.230443,
+     129.083966
+    ],
+    [
+     35.230986,
+     129.084092
+    ]
+   ],
+   "waypoints": [
+    [
+     35.23493,
+     129.086062
+    ],
+    [
+     35.230253,
+     129.08472
+    ]
+   ],
+   "maneuvers": [
+    {
+     "index": 0,
+     "skill": "RIGHT_TURN",
+     "street": "금강로279번길",
+     "lat": 35.233345,
+     "lon": 129.084741,
+     "distanceFromStartM": 269.7,
+     "confidence": "UNKNOWN"
+    },
+    {
+     "index": 1,
+     "skill": "LEFT_TURN_UNKNOWN",
+     "street": "부산대학로64번길",
+     "lat": 35.233297,
+     "lon": 129.084902,
+     "distanceFromStartM": 285.2,
+     "confidence": "UNKNOWN"
+    },
+    {
+     "index": 2,
+     "skill": "RIGHT_TURN",
+     "street": "금강로",
+     "lat": 35.235493,
+     "lon": 129.08621,
+     "distanceFromStartM": 614.0,
+     "confidence": "UNKNOWN"
+    },
+    {
+     "index": 3,
+     "skill": "RIGHT_TURN",
+     "street": "금정로",
+     "lat": 35.230237,
+     "lon": 129.084811,
+     "distanceFromStartM": 1212.1,
+     "confidence": "UNKNOWN"
+    }
+   ],
+   "skillCounts": {
+    "LEFT_TURN_UNKNOWN": 1,
+    "RIGHT_TURN": 3
+   },
+   "warnings": [
+    "신호등 정보가 없는 좌회전 1곳 — 출발 전에 지도에서 확인해 주세요"
+   ],
+   "debug": {
+    "seed": 3,
+    "penalty": 1,
+    "violations": [
+     {
+      "kind": "max",
+      "skill": "LEFT_TURN_UNKNOWN",
+      "count": 1,
+      "limit": 0
+     }
+    ],
+    "navMatch": 1.0,
+    "road": {
+     "maxSpeedKmh": 30,
+     "maxSpeedConfidence": "VERIFIED",
+     "matchedShare": 1.0,
+     "speedVerifiedShare": 0.441,
+     "speedEstimatedShare": 0.559,
+     "stretches": {
+      "FAST_ROAD": 0,
+      "WIDE_ROAD": 0,
+      "MULTI_LANE_ROAD": 1
+     }
+    }
+   }
+  },
+  {
+   "id": "L1-35.2310-129.0840-s11-fe7a0388",
+   "level": 1,
+   "title": "부산대 앞 금강로·부산대학로64번길 좌·우회전 순환 1.6km",
+   "distanceM": 1638,
+   "path": [
+    [
+     35.230986,
+     129.084092
+    ],
+    [
+     35.231591,
+     129.084233
+    ],
+    [
+     35.232511,
+     129.084478
+    ],
+    [
+     35.232559,
+     129.084527
+    ],
+    [
+     35.233345,
+     129.084741
+    ],
+    [
+     35.233297,
+     129.084902
+    ],
+    [
+     35.236852,
+     129.08583
+    ],
+    [
+     35.23673,
+     129.08654
+    ],
+    [
+     35.234065,
+     129.08583
+    ],
+    [
+     35.233066,
+     129.085573
+    ],
+    [
+     35.232365,
+     129.085378
+    ],
+    [
+     35.230237,
+     129.084811
+    ],
+    [
+     35.230372,
+     129.084023
+    ],
+    [
+     35.230443,
+     129.083966
+    ],
+    [
+     35.230986,
+     129.084092
+    ]
+   ],
+   "waypoints": [
+    [
+     35.236169,
+     129.086391
+    ],
+    [
+     35.230411,
+     129.084857
+    ]
+   ],
+   "maneuvers": [
+    {
+     "index": 0,
+     "skill": "RIGHT_TURN",
+     "street": "금강로279번길",
+     "lat": 35.233345,
+     "lon": 129.084741,
+     "distanceFromStartM": 269.7,
+     "confidence": "UNKNOWN"
+    },
+    {
+     "index": 1,
+     "skill": "LEFT_TURN_UNKNOWN",
+     "street": "부산대학로64번길",
+     "lat": 35.233297,
+     "lon": 129.084902,
+     "distanceFromStartM": 285.2,
+     "confidence": "UNKNOWN"
+    },
+    {
+     "index": 2,
+     "skill": "RIGHT_TURN",
+     "street": "금강로321번길",
+     "lat": 35.236852,
+     "lon": 129.08583,
+     "distanceFromStartM": 689.4,
+     "confidence": "UNKNOWN"
+    },
+    {
+     "index": 3,
+     "skill": "RIGHT_TURN",
+     "street": "금정로",
+     "lat": 35.230237,
+     "lon": 129.084811,
+     "distanceFromStartM": 1494.2,
+     "confidence": "UNKNOWN"
+    }
+   ],
+   "skillCounts": {
+    "LEFT_TURN_UNKNOWN": 1,
+    "RIGHT_TURN": 3
+   },
+   "warnings": [
+    "신호등 정보가 없는 좌회전 1곳 — 출발 전에 지도에서 확인해 주세요"
+   ],
+   "debug": {
+    "seed": 11,
+    "penalty": 1,
+    "violations": [
+     {
+      "kind": "max",
+      "skill": "LEFT_TURN_UNKNOWN",
+      "count": 1,
+      "limit": 0
+     }
+    ],
+    "navMatch": 1.0,
+    "road": {
+     "maxSpeedKmh": 30,
+     "maxSpeedConfidence": "VERIFIED",
+     "matchedShare": 1.0,
+     "speedVerifiedShare": 0.445,
+     "speedEstimatedShare": 0.555,
+     "stretches": {
+      "FAST_ROAD": 0,
+      "WIDE_ROAD": 0,
+      "MULTI_LANE_ROAD": 1
+     }
+    }
+   }
+  },
+  {
+   "id": "L1-35.2310-129.0840-s59-05ff5b64",
+   "level": 1,
+   "title": "부산대 앞 금강로·부산대학로63번길 좌·우회전 순환 1.5km",
+   "distanceM": 1501,
+   "path": [
+    [
+     35.230986,
+     129.084092
+    ],
+    [
+     35.231591,
+     129.084233
+    ],
+    [
+     35.232511,
+     129.084478
+    ],
+    [
+     35.232559,
+     129.084527
+    ],
+    [
+     35.233345,
+     129.084741
+    ],
+    [
+     35.233297,
+     129.084902
+    ],
+    [
+     35.234195,
+     129.085137
+    ],
+    [
+     35.234065,
+     129.08583
+    ],
+    [
+     35.23393,
+     129.086616
+    ],
+    [
+     35.235348,
+     129.08699
+    ],
+    [
+     35.235493,
+     129.08621
+    ],
+    [
+     35.233066,
+     129.085573
+    ],
+    [
+     35.232365,
+     129.085378
+    ],
+    [
+     35.230237,
+     129.084811
+    ],
+    [
+     35.230372,
+     129.084023
+    ],
+    [
+     35.230443,
+     129.083966
+    ],
+    [
+     35.230986,
+     129.084092
+    ]
+   ],
+   "waypoints": [
+    [
+     35.235254,
+     129.086965
+    ],
+    [
+     35.23029,
+     129.084825
+    ]
+   ],
+   "maneuvers": [
+    {
+     "index": 0,
+     "skill": "RIGHT_TURN",
+     "street": "금강로279번길",
+     "lat": 35.233345,
+     "lon": 129.084741,
+     "distanceFromStartM": 269.7,
+     "confidence": "UNKNOWN"
+    },
+    {
+     "index": 1,
+     "skill": "LEFT_TURN_UNKNOWN",
+     "street": "부산대학로64번길",
+     "lat": 35.233297,
+     "lon": 129.084902,
+     "distanceFromStartM": 285.2,
+     "confidence": "UNKNOWN"
+    },
+    {
+     "index": 2,
+     "skill": "RIGHT_TURN",
+     "street": "금강로291번길",
+     "lat": 35.234195,
+     "lon": 129.085137,
+     "distanceFromStartM": 387.3,
+     "confidence": "UNKNOWN"
+    },
+    {
+     "index": 3,
+     "skill": "LEFT_TURN_UNKNOWN",
+     "street": "부산대학로50번길",
+     "lat": 35.23393,
+     "lon": 129.086616,
+     "distanceFromStartM": 524.9,
+     "confidence": "UNKNOWN"
+    },
+    {
+     "index": 4,
+     "skill": "LEFT_TURN_UNKNOWN",
+     "street": "금강로",
+     "lat": 35.235493,
+     "lon": 129.08621,
+     "distanceFromStartM": 758.8,
+     "confidence": "UNKNOWN"
+    },
+    {
+     "index": 5,
+     "skill": "RIGHT_TURN",
+     "street": "금정로",
+     "lat": 35.230237,
+     "lon": 129.084811,
+     "distanceFromStartM": 1356.9,
+     "confidence": "UNKNOWN"
+    }
+   ],
+   "skillCounts": {
+    "LEFT_TURN_UNKNOWN": 3,
+    "RIGHT_TURN": 3
+   },
+   "warnings": [
+    "신호등 정보가 없는 좌회전 3곳 — 출발 전에 지도에서 확인해 주세요"
+   ],
+   "debug": {
+    "seed": 59,
+    "penalty": 3,
+    "violations": [
+     {
+      "kind": "max",
+      "skill": "LEFT_TURN_UNKNOWN",
+      "count": 3,
+      "limit": 0
+     }
+    ],
+    "navMatch": 1.0,
+    "road": {
+     "maxSpeedKmh": 30,
+     "maxSpeedConfidence": "VERIFIED",
+     "matchedShare": 1.0,
+     "speedVerifiedShare": 0.447,
+     "speedEstimatedShare": 0.553,
+     "stretches": {
+      "FAST_ROAD": 0,
+      "WIDE_ROAD": 0,
+      "MULTI_LANE_ROAD": 1
+     }
+    }
+   }
+  },
+  {
+   "id": "L2-35.2310-129.0840-s3-1f292a74",
+   "level": 2,
+   "title": "부산대 앞 금강로·금정로 좌·우회전 순환 2.7km · 신호 좌회전 2곳",
+   "distanceM": 2668,
+   "path": [
+    [
+     35.230986,
+     129.084092
+    ],
+    [
+     35.231591,
+     129.084233
+    ],
+    [
+     35.232511,
+     129.084478
+    ],
+    [
+     35.232559,
+     129.084527
+    ],
+    [
+     35.233345,
+     129.084741
+    ],
+    [
+     35.233297,
+     129.084902
+    ],
+    [
+     35.233066,
+     129.085573
+    ],
+    [
+     35.232908,
+     129.086347
+    ],
+    [
+     35.2328,
+     129.086937
+    ],
+    [
+     35.235253,
+     129.087571
+    ],
+    [
+     35.236515,
+     129.087722
+    ],
+    [
+     35.238037,
+     129.087872
+    ],
+    [
+     35.238564,
+     129.087852
+    ],
+    [
+     35.238979,
+     129.08786
+    ],
+    [
+     35.239957,
+     129.087902
+    ],
+    [
+     35.240034,
+     129.0876
+    ],
+    [
+     35.24006,
+     129.087408
+    ],
+    [
+     35.240063,
+     129.086934
+    ],
+    [
+     35.240056,
+     129.08645
+    ],
+    [
+     35.239977,
+     129.086449
+    ],
+    [
+     35.238971,
+     129.086449
+    ],
+    [
+     35.237958,
+     129.086503
+    ],
+    [
+     35.23673,
+     129.08654
+    ],
+    [
+     35.234065,
+     129.08583
+    ],
+    [
+     35.233066,
+     129.085573
+    ],
+    [
+     35.232365,
+     129.085378
+    ],
+    [
+     35.230237,
+     129.084811
+    ],
+    [
+     35.230372,
+     129.084023
+    ],
+    [
+     35.230443,
+     129.083966
+    ],
+    [
+     35.230986,
+     129.084092
+    ]
+   ],
+   "waypoints": [
+    [
+     35.24006,
+     129.087344
+    ],
+    [
+     35.231316,
+     129.085099
+    ]
+   ],
+   "maneuvers": [
+    {
+     "index": 0,
+     "skill": "RIGHT_TURN",
+     "street": "금강로279번길",
+     "lat": 35.233345,
+     "lon": 129.084741,
+     "distanceFromStartM": 269.7,
+     "confidence": "UNKNOWN"
+    },
+    {
+     "index": 1,
+     "skill": "LEFT_TURN_UNKNOWN",
+     "street": "금정로",
+     "lat": 35.2328,
+     "lon": 129.086937,
+     "distanceFromStartM": 478.7,
+     "confidence": "UNKNOWN"
+    },
+    {
+     "index": 2,
+     "skill": "LEFT_TURN_SIGNALIZED",
+     "street": "수림로",
+     "lat": 35.239957,
+     "lon": 129.087902,
+     "distanceFromStartM": 1281.9,
+     "confidence": "VERIFIED"
+    },
+    {
+     "index": 3,
+     "skill": "LEFT_TURN_SIGNALIZED",
+     "street": "금강로",
+     "lat": 35.240056,
+     "lon": 129.08645,
+     "distanceFromStartM": 1415.3,
+     "confidence": "VERIFIED"
+    },
+    {
+     "index": 4,
+     "skill": "RIGHT_TURN",
+     "street": "금정로",
+     "lat": 35.230237,
+     "lon": 129.084811,
+     "distanceFromStartM": 2524.2,
+     "confidence": "UNKNOWN"
+    }
+   ],
+   "skillCounts": {
+    "LEFT_TURN_SIGNALIZED": 2,
+    "LEFT_TURN_UNKNOWN": 1,
+    "RIGHT_TURN": 2
+   },
+   "warnings": [
+    "신호등 정보가 없는 좌회전 1곳 — 출발 전에 지도에서 확인해 주세요"
+   ],
+   "debug": {
+    "seed": 3,
+    "penalty": 1,
+    "violations": [
+     {
+      "kind": "max",
+      "skill": "LEFT_TURN_UNKNOWN",
+      "count": 1,
+      "limit": 0
+     }
+    ],
+    "navMatch": 1.0,
+    "road": {
+     "maxSpeedKmh": 50,
+     "maxSpeedConfidence": "VERIFIED",
+     "matchedShare": 1.0,
+     "speedVerifiedShare": 0.764,
+     "speedEstimatedShare": 0.236,
+     "stretches": {
+      "FAST_ROAD": 0,
+      "WIDE_ROAD": 1,
+      "MULTI_LANE_ROAD": 1
+     }
+    }
+   }
+  },
+  {
+   "id": "L2-35.2310-129.0840-s11-70e02a3f",
+   "level": 2,
+   "title": "부산대 앞 금강로·금정로 좌·우회전 순환 2.7km · 신호 좌회전 1곳",
+   "distanceM": 2668,
+   "path": [
+    [
+     35.230986,
+     129.084092
+    ],
+    [
+     35.231591,
+     129.084233
+    ],
+    [
+     35.232511,
+     129.084478
+    ],
+    [
+     35.232559,
+     129.084527
+    ],
+    [
+     35.233345,
+     129.084741
+    ],
+    [
+     35.233297,
+     129.084902
+    ],
+    [
+     35.233066,
+     129.085573
+    ],
+    [
+     35.232908,
+     129.086347
+    ],
+    [
+     35.2328,
+     129.086937
+    ],
+    [
+     35.235253,
+     129.087571
+    ],
+    [
+     35.236515,
+     129.087722
+    ],
+    [
+     35.238037,
+     129.087872
+    ],
+    [
+     35.238564,
+     129.087852
+    ],
+    [
+     35.238979,
+     129.08786
+    ],
+    [
+     35.239957,
+     129.087902
+    ],
+    [
+     35.240034,
+     129.0876
+    ],
+    [
+     35.24006,
+     129.087408
+    ],
+    [
+     35.240063,
+     129.086934
+    ],
+    [
+     35.240056,
+     129.08645
+    ],
+    [
+     35.238971,
+     129.086449
+    ],
+    [
+     35.237958,
+     129.086503
+    ],
+    [
+     35.23673,
+     129.08654
+    ],
+    [
+     35.234065,
+     129.08583
+    ],
+    [
+     35.233066,
+     129.085573
+    ],
+    [
+     35.232365,
+     129.085378
+    ],
+    [
+     35.230237,
+     129.084811
+    ],
+    [
+     35.230372,
+     129.084023
+    ],
+    [
+     35.230443,
+     129.083966
+    ],
+    [
+     35.230986,
+     129.084092
+    ]
+   ],
+   "waypoints": [
+    [
+     35.24006,
+     129.087344
+    ],
+    [
+     35.231316,
+     129.085099
+    ]
+   ],
+   "maneuvers": [
+    {
+     "index": 0,
+     "skill": "RIGHT_TURN",
+     "street": "금강로279번길",
+     "lat": 35.233345,
+     "lon": 129.084741,
+     "distanceFromStartM": 269.7,
+     "confidence": "UNKNOWN"
+    },
+    {
+     "index": 1,
+     "skill": "LEFT_TURN_UNKNOWN",
+     "street": "금정로",
+     "lat": 35.2328,
+     "lon": 129.086937,
+     "distanceFromStartM": 478.7,
+     "confidence": "UNKNOWN"
+    },
+    {
+     "index": 2,
+     "skill": "LEFT_TURN_SIGNALIZED",
+     "street": "금강로",
+     "lat": 35.240056,
+     "lon": 129.08645,
+     "distanceFromStartM": 1415.3,
+     "confidence": "VERIFIED"
+    },
+    {
+     "index": 3,
+     "skill": "RIGHT_TURN",
+     "street": "금정로",
+     "lat": 35.230237,
+     "lon": 129.084811,
+     "distanceFromStartM": 2524.2,
+     "confidence": "UNKNOWN"
+    }
+   ],
+   "skillCounts": {
+    "LEFT_TURN_SIGNALIZED": 1,
+    "LEFT_TURN_UNKNOWN": 1,
+    "RIGHT_TURN": 2
+   },
+   "warnings": [
+    "신호등 정보가 없는 좌회전 1곳 — 출발 전에 지도에서 확인해 주세요",
+    "신호 있는 좌회전이 1곳뿐이에요"
+   ],
+   "debug": {
+    "seed": 11,
+    "penalty": 2,
+    "violations": [
+     {
+      "kind": "max",
+      "skill": "LEFT_TURN_UNKNOWN",
+      "count": 1,
+      "limit": 0
+     },
+     {
+      "kind": "min",
+      "skill": "LEFT_TURN_SIGNALIZED",
+      "count": 1,
+      "limit": 2
+     }
+    ],
+    "navMatch": 1.0,
+    "road": {
+     "maxSpeedKmh": 50,
+     "maxSpeedConfidence": "VERIFIED",
+     "matchedShare": 1.0,
+     "speedVerifiedShare": 0.764,
+     "speedEstimatedShare": 0.236,
+     "stretches": {
+      "FAST_ROAD": 0,
+      "WIDE_ROAD": 1,
+      "MULTI_LANE_ROAD": 1
+     }
+    }
+   }
+  },
+  {
+   "id": "L2-35.2310-129.0840-s78-1e51d757",
+   "level": 2,
+   "title": "부산대 앞 금강로·부산대학로64번길 좌·우회전 순환 2.4km",
+   "distanceM": 2392,
+   "path": [
+    [
+     35.230986,
+     129.084092
+    ],
+    [
+     35.231591,
+     129.084233
+    ],
+    [
+     35.232511,
+     129.084478
+    ],
+    [
+     35.232559,
+     129.084527
+    ],
+    [
+     35.233345,
+     129.084741
+    ],
+    [
+     35.233297,
+     129.084902
+    ],
+    [
+     35.236852,
+     129.08583
+    ],
+    [
+     35.236953,
+     129.085231
+    ],
+    [
+     35.238967,
+     129.085749
+    ],
+    [
+     35.239979,
+     129.085765
+    ],
+    [
+     35.239977,
+     129.086449
+    ],
+    [
+     35.238971,
+     129.086449
+    ],
+    [
+     35.237958,
+     129.086503
+    ],
+    [
+     35.23673,
+     129.08654
+    ],
+    [
+     35.234065,
+     129.08583
+    ],
+    [
+     35.233066,
+     129.085573
+    ],
+    [
+     35.232365,
+     129.085378
+    ],
+    [
+     35.230237,
+     129.084811
+    ],
+    [
+     35.230372,
+     129.084023
+    ],
+    [
+     35.230443,
+     129.083966
+    ],
+    [
+     35.230986,
+     129.084092
+    ]
+   ],
+   "waypoints": [
+    [
+     35.239547,
+     129.086449
+    ],
+    [
+     35.231074,
+     129.085034
+    ]
+   ],
+   "maneuvers": [
+    {
+     "index": 0,
+     "skill": "RIGHT_TURN",
+     "street": "금강로279번길",
+     "lat": 35.233345,
+     "lon": 129.084741,
+     "distanceFromStartM": 269.7,
+     "confidence": "UNKNOWN"
+    },
+    {
+     "index": 1,
+     "skill": "LEFT_TURN_UNKNOWN",
+     "street": "부산대학로64번길",
+     "lat": 35.233297,
+     "lon": 129.084902,
+     "distanceFromStartM": 285.2,
+     "confidence": "UNKNOWN"
+    },
+    {
+     "index": 2,
+     "skill": "LEFT_TURN_UNKNOWN",
+     "street": "금강로321번길",
+     "lat": 35.236852,
+     "lon": 129.08583,
+     "distanceFromStartM": 689.4,
+     "confidence": "UNKNOWN"
+    },
+    {
+     "index": 3,
+     "skill": "RIGHT_TURN",
+     "street": "수림로61번길",
+     "lat": 35.236953,
+     "lon": 129.085231,
+     "distanceFromStartM": 745.0,
+     "confidence": "UNKNOWN"
+    },
+    {
+     "index": 4,
+     "skill": "RIGHT_TURN",
+     "street": "금강로",
+     "lat": 35.239977,
+     "lon": 129.086449,
+     "distanceFromStartM": 1148.4,
+     "confidence": "VERIFIED"
+    },
+    {
+     "index": 5,
+     "skill": "RIGHT_TURN",
+     "street": "금정로",
+     "lat": 35.230237,
+     "lon": 129.084811,
+     "distanceFromStartM": 2248.5,
+     "confidence": "UNKNOWN"
+    }
+   ],
+   "skillCounts": {
+    "LEFT_TURN_UNKNOWN": 2,
+    "RIGHT_TURN": 4
+   },
+   "warnings": [
+    "신호등 정보가 없는 좌회전 2곳 — 출발 전에 지도에서 확인해 주세요",
+    "신호 있는 좌회전이 없어요"
+   ],
+   "debug": {
+    "seed": 78,
+    "penalty": 4,
+    "violations": [
+     {
+      "kind": "max",
+      "skill": "LEFT_TURN_UNKNOWN",
+      "count": 2,
+      "limit": 0
+     },
+     {
+      "kind": "min",
+      "skill": "LEFT_TURN_SIGNALIZED",
+      "count": 0,
+      "limit": 2
+     }
+    ],
+    "navMatch": 1.0,
+    "road": {
+     "maxSpeedKmh": 80,
+     "maxSpeedConfidence": "VERIFIED",
+     "matchedShare": 1.0,
+     "speedVerifiedShare": 0.485,
+     "speedEstimatedShare": 0.515,
+     "stretches": {
+      "FAST_ROAD": 1,
+      "WIDE_ROAD": 0,
+      "MULTI_LANE_ROAD": 1
+     }
+    }
+   }
+  },
+  {
+   "id": "L3-35.2310-129.0840-s35-14c8c635",
+   "level": 3,
+   "title": "부산대 앞 중앙대로·금강로 좌·우회전 순환 4.4km",
+   "distanceM": 4364,
+   "path": [
+    [
+     35.230986,
+     129.084092
+    ],
+    [
+     35.230443,
+     129.083966
+    ],
+    [
+     35.230372,
+     129.084023
+    ],
+    [
+     35.229985,
+     129.086287
+    ],
+    [
+     35.23076,
+     129.086437
+    ],
+    [
+     35.230567,
+     129.0876
+    ],
+    [
+     35.231171,
+     129.087631
+    ],
+    [
+     35.231111,
+     129.088777
+    ],
+    [
+     35.231126,
+     129.088964
+    ],
+    [
+     35.231108,
+     129.089423
+    ],
+    [
+     35.230941,
+     129.091498
+    ],
+    [
+     35.232464,
+     129.091658
+    ],
+    [
+     35.235504,
+     129.091998
+    ],
+    [
+     35.238049,
+     129.092387
+    ],
+    [
+     35.239889,
+     129.09274
+    ],
+    [
+     35.241572,
+     129.092978
+    ],
+    [
+     35.242037,
+     129.093024
+    ],
+    [
+     35.243089,
+     129.093217
+    ],
+    [
+     35.243087,
+     129.093073
+    ],
+    [
+     35.241587,
+     129.092836
+    ],
+    [
+     35.241182,
+     129.092783
+    ],
+    [
+     35.23937,
+     129.09249
+    ],
+    [
+     35.239627,
+     129.090363
+    ],
+    [
+     35.239683,
+     129.089791
+    ],
+    [
+     35.239821,
+     129.088673
+    ],
+    [
+     35.239933,
+     129.088027
+    ],
+    [
+     35.239957,
+     129.087902
+    ],
+    [
+     35.240034,
+     129.0876
+    ],
+    [
+     35.24006,
+     129.087408
+    ],
+    [
+     35.240063,
+     129.086934
+    ],
+    [
+     35.240056,
+     129.08645
+    ],
+    [
+     35.238971,
+     129.086449
+    ],
+    [
+     35.237958,
+     129.086503
+    ],
+    [
+     35.23673,
+     129.08654
+    ],
+    [
+     35.234065,
+     129.08583
+    ],
+    [
+     35.233066,
+     129.085573
+    ],
+    [
+     35.231446,
+     129.085133
+    ],
+    [
+     35.231591,
+     129.084233
+    ],
+    [
+     35.230986,
+     129.084092
+    ]
+   ],
+   "waypoints": [
+    [
+     35.242936,
+     129.093049
+    ],
+    [
+     35.239786,
+     129.08645
+    ]
+   ],
+   "maneuvers": [
+    {
+     "index": 0,
+     "skill": "LEFT_TURN_UNKNOWN",
+     "street": "금정로",
+     "lat": 35.229985,
+     "lon": 129.086287,
+     "distanceFromStartM": 281.0,
+     "confidence": "UNKNOWN"
+    },
+    {
+     "index": 1,
+     "skill": "RIGHT_TURN",
+     "street": "금정로68번길",
+     "lat": 35.23076,
+     "lon": 129.086437,
+     "distanceFromStartM": 368.2,
+     "confidence": "UNKNOWN"
+    },
+    {
+     "index": 2,
+     "skill": "LEFT_TURN_UNKNOWN",
+     "street": "부산대학로",
+     "lat": 35.230567,
+     "lon": 129.0876,
+     "distanceFromStartM": 476.0,
+     "confidence": "UNKNOWN"
+    },
+    {
+     "index": 3,
+     "skill": "RIGHT_TURN",
+     "street": "부산대학로",
+     "lat": 35.231171,
+     "lon": 129.087631,
+     "distanceFromStartM": 543.2,
+     "confidence": "UNKNOWN"
+    },
+    {
+     "index": 4,
+     "skill": "LEFT_TURN_SIGNALIZED",
+     "street": "중앙대로",
+     "lat": 35.230941,
+     "lon": 129.091498,
+     "distanceFromStartM": 895.7,
+     "confidence": "VERIFIED"
+    },
+    {
+     "index": 5,
+     "skill": "SCHOOL_ZONE",
+     "street": "중앙대로",
+     "lat": 35.232279,
+     "lon": 129.091639,
+     "distanceFromStartM": 1045.0,
+     "confidence": "ESTIMATED"
+    },
+    {
+     "index": 6,
+     "skill": "SCHOOL_ZONE",
+     "street": "중앙대로",
+     "lat": 35.240135,
+     "lon": 129.092775,
+     "distanceFromStartM": 1925.0,
+     "confidence": "ESTIMATED"
+    },
+    {
+     "index": 7,
+     "skill": "LEFT_TURN_SIGNALIZED",
+     "street": "중앙대로1778번길",
+     "lat": 35.243089,
+     "lon": 129.093217,
+     "distanceFromStartM": 2256.0,
+     "confidence": "VERIFIED"
+    },
+    {
+     "index": 8,
+     "skill": "SCHOOL_ZONE",
+     "street": "중앙대로",
+     "lat": 35.242365,
+     "lon": 129.092959,
+     "distanceFromStartM": 2350.0,
+     "confidence": "ESTIMATED"
+    },
+    {
+     "index": 9,
+     "skill": "RIGHT_TURN",
+     "street": "수림로",
+     "lat": 35.23937,
+     "lon": 129.09249,
+     "distanceFromStartM": 2685.7,
+     "confidence": "VERIFIED"
+    },
+    {
+     "index": 10,
+     "skill": "LEFT_TURN_SIGNALIZED",
+     "street": "금강로",
+     "lat": 35.240056,
+     "lon": 129.08645,
+     "distanceFromStartM": 3241.1,
+     "confidence": "VERIFIED"
+    },
+    {
+     "index": 11,
+     "skill": "RIGHT_TURN",
+     "street": "부산대학로",
+     "lat": 35.231446,
+     "lon": 129.085133,
+     "distanceFromStartM": 4212.4,
+     "confidence": "VERIFIED"
+    },
+    {
+     "index": 12,
+     "skill": "LEFT_TURN_UNKNOWN",
+     "street": "부산대학로63번길",
+     "lat": 35.231591,
+     "lon": 129.084233,
+     "distanceFromStartM": 4295.7,
+     "confidence": "UNKNOWN"
+    }
+   ],
+   "skillCounts": {
+    "LEFT_TURN_SIGNALIZED": 3,
+    "LEFT_TURN_UNKNOWN": 3,
+    "RIGHT_TURN": 4,
+    "SCHOOL_ZONE": 3
+   },
+   "warnings": [
+    "신호등 정보가 없는 좌회전 3곳 — 출발 전에 지도에서 확인해 주세요",
+    "어린이보호구역 3곳을 지나요 — 시속 30 이하로 천천히"
+   ],
+   "debug": {
+    "seed": 35,
+    "penalty": 3,
+    "violations": [
+     {
+      "kind": "max",
+      "skill": "LEFT_TURN_UNKNOWN",
+      "count": 3,
+      "limit": 0
+     }
+    ],
+    "navMatch": 0.973,
+    "road": {
+     "maxSpeedKmh": 80,
+     "maxSpeedConfidence": "VERIFIED",
+     "matchedShare": 0.961,
+     "speedVerifiedShare": 0.881,
+     "speedEstimatedShare": 0.08,
+     "stretches": {
+      "FAST_ROAD": 1,
+      "WIDE_ROAD": 2,
+      "MULTI_LANE_ROAD": 2
+     }
+    }
+   }
+  },
+  {
+   "id": "L3-35.2310-129.0840-s90-2fd00dac",
+   "level": 3,
+   "title": "부산대 앞 중앙대로·금강로 좌·우회전 순환 5.6km",
+   "distanceM": 5617,
+   "path": [
+    [
+     35.230986,
+     129.084092
+    ],
+    [
+     35.230443,
+     129.083966
+    ],
+    [
+     35.230372,
+     129.084023
+    ],
+    [
+     35.230237,
+     129.084811
+    ],
+    [
+     35.229026,
+     129.084488
+    ],
+    [
+     35.227856,
+     129.083584
+    ],
+    [
+     35.226835,
+     129.082889
+    ],
+    [
+     35.226294,
+     129.082535
+    ],
+    [
+     35.224389,
+     129.081892
+    ],
+    [
+     35.223259,
+     129.081473
+    ],
+    [
+     35.221641,
+     129.080902
+    ],
+    [
+     35.22005,
+     129.080321
+    ],
+    [
+     35.219795,
+     129.080208
+    ],
+    [
+     35.218743,
+     129.079643
+    ],
+    [
+     35.218346,
+     129.07941
+    ],
+    [
+     35.216791,
+     129.078431
+    ],
+    [
+     35.215768,
+     129.07781
+    ],
+    [
+     35.214803,
+     129.077179
+    ],
+    [
+     35.214173,
+     129.076781
+    ],
+    [
+     35.213095,
+     129.07762
+    ],
+    [
+     35.212576,
+     129.077982
+    ],
+    [
+     35.21225,
+     129.07823
+    ],
+    [
+     35.212133,
+     129.078384
+    ],
+    [
+     35.212005,
+     129.078533
+    ],
+    [
+     35.211814,
+     129.078629
+    ],
+    [
+     35.211685,
+     129.078739
+    ],
+    [
+     35.211821,
+     129.078826
+    ],
+    [
+     35.21231,
+     129.07917
+    ],
+    [
+     35.21407,
+     129.080335
+    ],
+    [
+     35.214543,
+     129.080678
+    ],
+    [
+     35.214886,
+     129.080963
+    ],
+    [
+     35.215206,
+     129.081295
+    ],
+    [
+     35.216023,
+     129.082482
+    ],
+    [
+     35.21645,
+     129.08305
+    ],
+    [
+     35.216786,
+     129.08341
+    ],
+    [
+     35.217375,
+     129.083958
+    ],
+    [
+     35.217954,
+     129.084385
+    ],
+    [
+     35.218256,
+     129.084661
+    ],
+    [
+     35.218713,
+     129.08499
+    ],
+    [
+     35.21921,
+     129.085405
+    ],
+    [
+     35.219676,
+     129.085739
+    ],
+    [
+     35.220081,
+     129.086001
+    ],
+    [
+     35.22034,
+     129.086141
+    ],
+    [
+     35.221166,
+     129.086616
+    ],
+    [
+     35.222856,
+     129.08752
+    ],
+    [
+     35.223779,
+     129.087978
+    ],
+    [
+     35.224472,
+     129.088383
+    ],
+    [
+     35.225361,
+     129.088838
+    ],
+    [
+     35.225815,
+     129.089046
+    ],
+    [
+     35.226644,
+     129.089485
+    ],
+    [
+     35.227462,
+     129.089994
+    ],
+    [
+     35.228911,
+     129.090835
+    ],
+    [
+     35.228953,
+     129.090686
+    ],
+    [
+     35.229137,
+     129.089822
+    ],
+    [
+     35.229081,
+     129.089796
+    ],
+    [
+     35.228609,
+     129.089656
+    ],
+    [
+     35.22865,
+     129.089147
+    ],
+    [
+     35.228694,
+     129.089028
+    ],
+    [
+     35.228857,
+     129.08911
+    ],
+    [
+     35.229182,
+     129.089219
+    ],
+    [
+     35.229255,
+     129.089229
+    ],
+    [
+     35.22968,
+     129.089175
+    ],
+    [
+     35.230303,
+     129.08906
+    ],
+    [
+     35.230567,
+     129.0876
+    ],
+    [
+     35.23076,
+     129.086437
+    ],
+    [
+     35.231205,
+     129.086526
+    ],
+    [
+     35.231446,
+     129.085133
+    ],
+    [
+     35.231591,
+     129.084233
+    ],
+    [
+     35.230986,
+     129.084092
+    ]
+   ],
+   "waypoints": [
+    [
+     35.214761,
+     129.080859
+    ],
+    [
+     35.230329,
+     129.088918
+    ]
+   ],
+   "maneuvers": [
+    {
+     "index": 0,
+     "skill": "RIGHT_TURN",
+     "street": "금강로",
+     "lat": 35.230237,
+     "lon": 129.084811,
+     "distanceFromStartM": 144.0,
+     "confidence": "UNKNOWN"
+    },
+    {
+     "index": 1,
+     "skill": "SCHOOL_ZONE",
+     "street": "금강로",
+     "lat": 35.229306,
+     "lon": 129.084563,
+     "distanceFromStartM": 250.0,
+     "confidence": "ESTIMATED"
+    },
+    {
+     "index": 2,
+     "skill": "LEFT_TURN_SIGNALIZED",
+     "street": "동래로",
+     "lat": 35.214173,
+     "lon": 129.076781,
+     "distanceFromStartM": 2085.4,
+     "confidence": "VERIFIED"
+    },
+    {
+     "index": 3,
+     "skill": "LEFT_TURN_UNKNOWN",
+     "street": "중앙대로",
+     "lat": 35.211685,
+     "lon": 129.078739,
+     "distanceFromStartM": 2415.8,
+     "confidence": "UNKNOWN"
+    },
+    {
+     "index": 4,
+     "skill": "LEFT_TURN_UNKNOWN",
+     "street": "부곡로141번길",
+     "lat": 35.228911,
+     "lon": 129.090835,
+     "distanceFromStartM": 4644.9,
+     "confidence": "UNKNOWN"
+    },
+    {
+     "index": 5,
+     "skill": "LEFT_TURN_UNKNOWN",
+     "street": "부곡온천천로",
+     "lat": 35.229137,
+     "lon": 129.089822,
+     "distanceFromStartM": 4740.3,
+     "confidence": "UNKNOWN"
+    },
+    {
+     "index": 6,
+     "skill": "RIGHT_TURN",
+     "street": "",
+     "lat": 35.228609,
+     "lon": 129.089656,
+     "distanceFromStartM": 4800.9,
+     "confidence": "UNKNOWN"
+    },
+    {
+     "index": 7,
+     "skill": "RIGHT_TURN",
+     "street": "장전온천천로",
+     "lat": 35.228694,
+     "lon": 129.089028,
+     "distanceFromStartM": 4859.3,
+     "confidence": "UNKNOWN"
+    },
+    {
+     "index": 8,
+     "skill": "LEFT_TURN_UNKNOWN",
+     "street": "금정로68번길",
+     "lat": 35.230303,
+     "lon": 129.08906,
+     "distanceFromStartM": 5042.1,
+     "confidence": "UNKNOWN"
+    },
+    {
+     "index": 9,
+     "skill": "RIGHT_TURN",
+     "street": "금정로",
+     "lat": 35.23076,
+     "lon": 129.086437,
+     "distanceFromStartM": 5285.7,
+     "confidence": "UNKNOWN"
+    },
+    {
+     "index": 10,
+     "skill": "LEFT_TURN_SIGNALIZED",
+     "street": "부산대학로",
+     "lat": 35.231205,
+     "lon": 129.086526,
+     "distanceFromStartM": 5335.8,
+     "confidence": "VERIFIED"
+    },
+    {
+     "index": 11,
+     "skill": "LEFT_TURN_UNKNOWN",
+     "street": "부산대학로63번길",
+     "lat": 35.231591,
+     "lon": 129.084233,
+     "distanceFromStartM": 5548.5,
+     "confidence": "UNKNOWN"
+    }
+   ],
+   "skillCounts": {
+    "LEFT_TURN_SIGNALIZED": 2,
+    "LEFT_TURN_UNKNOWN": 5,
+    "RIGHT_TURN": 4,
+    "SCHOOL_ZONE": 1
+   },
+   "warnings": [
+    "신호등 정보가 없는 좌회전 5곳 — 출발 전에 지도에서 확인해 주세요",
+    "어린이보호구역을 지나요 — 시속 30 이하로 천천히"
+   ],
+   "debug": {
+    "seed": 90,
+    "penalty": 5,
+    "violations": [
+     {
+      "kind": "max",
+      "skill": "LEFT_TURN_UNKNOWN",
+      "count": 5,
+      "limit": 0
+     }
+    ],
+    "navMatch": 0.956,
+    "road": {
+     "maxSpeedKmh": 50,
+     "maxSpeedConfidence": "VERIFIED",
+     "matchedShare": 0.464,
+     "speedVerifiedShare": 0.416,
+     "speedEstimatedShare": 0.048,
+     "stretches": {
+      "FAST_ROAD": 0,
+      "WIDE_ROAD": 1,
+      "MULTI_LANE_ROAD": 3
+     }
+    }
+   }
+  },
+  {
+   "id": "L3-35.2310-129.0840-s83-73170589",
+   "level": 3,
+   "title": "부산대 앞 중앙대로·금강로 좌·우회전 순환 4.7km",
+   "distanceM": 4654,
+   "path": [
+    [
+     35.230986,
+     129.084092
+    ],
+    [
+     35.230443,
+     129.083966
+    ],
+    [
+     35.230372,
+     129.084023
+    ],
+    [
+     35.229985,
+     129.086287
+    ],
+    [
+     35.23076,
+     129.086437
+    ],
+    [
+     35.230567,
+     129.0876
+    ],
+    [
+     35.231171,
+     129.087631
+    ],
+    [
+     35.231111,
+     129.088777
+    ],
+    [
+     35.231126,
+     129.088964
+    ],
+    [
+     35.231108,
+     129.089423
+    ],
+    [
+     35.230941,
+     129.091498
+    ],
+    [
+     35.232464,
+     129.091658
+    ],
+    [
+     35.235504,
+     129.091998
+    ],
+    [
+     35.238049,
+     129.092387
+    ],
+    [
+     35.239889,
+     129.09274
+    ],
+    [
+     35.240754,
+     129.092861
+    ],
+    [
+     35.240687,
+     129.093528
+    ],
+    [
+     35.241413,
+     129.094473
+    ],
+    [
+     35.242236,
+     129.095487
+    ],
+    [
+     35.242581,
+     129.09508
+    ],
+    [
+     35.242973,
+     129.094674
+    ],
+    [
+     35.243072,
+     129.093546
+    ],
+    [
+     35.243089,
+     129.093217
+    ],
+    [
+     35.243087,
+     129.093073
+    ],
+    [
+     35.241587,
+     129.092836
+    ],
+    [
+     35.241182,
+     129.092783
+    ],
+    [
+     35.23937,
+     129.09249
+    ],
+    [
+     35.239627,
+     129.090363
+    ],
+    [
+     35.239683,
+     129.089791
+    ],
+    [
+     35.239821,
+     129.088673
+    ],
+    [
+     35.239933,
+     129.088027
+    ],
+    [
+     35.239957,
+     129.087902
+    ],
+    [
+     35.240034,
+     129.0876
+    ],
+    [
+     35.24006,
+     129.087408
+    ],
+    [
+     35.240063,
+     129.086934
+    ],
+    [
+     35.240056,
+     129.08645
+    ],
+    [
+     35.238971,
+     129.086449
+    ],
+    [
+     35.237958,
+     129.086503
+    ],
+    [
+     35.23673,
+     129.08654
+    ],
+    [
+     35.234065,
+     129.08583
+    ],
+    [
+     35.233066,
+     129.085573
+    ],
+    [
+     35.231446,
+     129.085133
+    ],
+    [
+     35.231591,
+     129.084233
+    ],
+    [
+     35.230986,
+     129.084092
+    ]
+   ],
+   "waypoints": [
+    [
+     35.242393,
+     129.095301
+    ],
+    [
+     35.234202,
+     129.085867
+    ]
+   ],
+   "maneuvers": [
+    {
+     "index": 0,
+     "skill": "LEFT_TURN_UNKNOWN",
+     "street": "금정로",
+     "lat": 35.229985,
+     "lon": 129.086287,
+     "distanceFromStartM": 281.0,
+     "confidence": "UNKNOWN"
+    },
+    {
+     "index": 1,
+     "skill": "RIGHT_TURN",
+     "street": "금정로68번길",
+     "lat": 35.23076,
+     "lon": 129.086437,
+     "distanceFromStartM": 368.2,
+     "confidence": "UNKNOWN"
+    },
+    {
+     "index": 2,
+     "skill": "LEFT_TURN_UNKNOWN",
+     "street": "부산대학로",
+     "lat": 35.230567,
+     "lon": 129.0876,
+     "distanceFromStartM": 476.0,
+     "confidence": "UNKNOWN"
+    },
+    {
+     "index": 3,
+     "skill": "RIGHT_TURN",
+     "street": "부산대학로",
+     "lat": 35.231171,
+     "lon": 129.087631,
+     "distanceFromStartM": 543.2,
+     "confidence": "UNKNOWN"
+    },
+    {
+     "index": 4,
+     "skill": "LEFT_TURN_SIGNALIZED",
+     "street": "중앙대로",
+     "lat": 35.230941,
+     "lon": 129.091498,
+     "distanceFromStartM": 895.7,
+     "confidence": "VERIFIED"
+    },
+    {
+     "index": 5,
+     "skill": "SCHOOL_ZONE",
+     "street": "중앙대로",
+     "lat": 35.232279,
+     "lon": 129.091639,
+     "distanceFromStartM": 1045.0,
+     "confidence": "ESTIMATED"
+    },
+    {
+     "index": 6,
+     "skill": "SCHOOL_ZONE",
+     "street": "중앙대로",
+     "lat": 35.240135,
+     "lon": 129.092774,
+     "distanceFromStartM": 1925.0,
+     "confidence": "ESTIMATED"
+    },
+    {
+     "index": 7,
+     "skill": "RIGHT_TURN",
+     "street": "오륜대로",
+     "lat": 35.240754,
+     "lon": 129.092861,
+     "distanceFromStartM": 1994.2,
+     "confidence": "UNKNOWN"
+    },
+    {
+     "index": 8,
+     "skill": "LEFT_TURN_UNKNOWN",
+     "street": "오륜대로",
+     "lat": 35.240687,
+     "lon": 129.093528,
+     "distanceFromStartM": 2055.3,
+     "confidence": "UNKNOWN"
+    },
+    {
+     "index": 9,
+     "skill": "LEFT_TURN_UNKNOWN",
+     "street": "중앙대로1778번길",
+     "lat": 35.242236,
+     "lon": 129.095487,
+     "distanceFromStartM": 2302.9,
+     "confidence": "UNKNOWN"
+    },
+    {
+     "index": 10,
+     "skill": "LEFT_TURN_SIGNALIZED",
+     "street": "중앙대로",
+     "lat": 35.243087,
+     "lon": 129.093073,
+     "distanceFromStartM": 2559.3,
+     "confidence": "VERIFIED"
+    },
+    {
+     "index": 11,
+     "skill": "SCHOOL_ZONE",
+     "street": "중앙대로",
+     "lat": 35.242367,
+     "lon": 129.092959,
+     "distanceFromStartM": 2640.0,
+     "confidence": "ESTIMATED"
+    },
+    {
+     "index": 12,
+     "skill": "RIGHT_TURN",
+     "street": "수림로",
+     "lat": 35.23937,
+     "lon": 129.09249,
+     "distanceFromStartM": 2976.0,
+     "confidence": "VERIFIED"
+    },
+    {
+     "index": 13,
+     "skill": "LEFT_TURN_SIGNALIZED",
+     "street": "금강로",
+     "lat": 35.240056,
+     "lon": 129.08645,
+     "distanceFromStartM": 3531.4,
+     "confidence": "VERIFIED"
+    },
+    {
+     "index": 14,
+     "skill": "RIGHT_TURN",
+     "street": "부산대학로",
+     "lat": 35.231446,
+     "lon": 129.085133,
+     "distanceFromStartM": 4502.6,
+     "confidence": "VERIFIED"
+    },
+    {
+     "index": 15,
+     "skill": "LEFT_TURN_UNKNOWN",
+     "street": "부산대학로63번길",
+     "lat": 35.231591,
+     "lon": 129.084233,
+     "distanceFromStartM": 4586.0,
+     "confidence": "UNKNOWN"
+    }
+   ],
+   "skillCounts": {
+    "LEFT_TURN_SIGNALIZED": 3,
+    "LEFT_TURN_UNKNOWN": 5,
+    "RIGHT_TURN": 5,
+    "SCHOOL_ZONE": 3
+   },
+   "warnings": [
+    "신호등 정보가 없는 좌회전 5곳 — 출발 전에 지도에서 확인해 주세요",
+    "어린이보호구역 3곳을 지나요 — 시속 30 이하로 천천히"
+   ],
+   "debug": {
+    "seed": 83,
+    "penalty": 5,
+    "violations": [
+     {
+      "kind": "max",
+      "skill": "LEFT_TURN_UNKNOWN",
+      "count": 5,
+      "limit": 0
+     }
+    ],
+    "navMatch": 0.974,
+    "road": {
+     "maxSpeedKmh": 80,
+     "maxSpeedConfidence": "VERIFIED",
+     "matchedShare": 0.963,
+     "speedVerifiedShare": 0.834,
+     "speedEstimatedShare": 0.129,
+     "stretches": {
+      "FAST_ROAD": 1,
+      "WIDE_ROAD": 3,
+      "MULTI_LANE_ROAD": 3
+     }
+    }
+   }
+  }
+ ]
+}

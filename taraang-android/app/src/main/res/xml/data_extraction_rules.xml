@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Android 12+ 클라우드 백업·기기 간 이전에서 주행 기록(Room DB, 위치 포함)과 코스 캐시를 뺀다.
+  allowBackup="false"는 기기 간 이전(device-transfer)을 막지 못해 따로 둔다. 위치·주행 기록은 기기 안에만(7장 19번).
+-->
+<data-extraction-rules>
+    <cloud-backup>
+        <exclude domain="database" path="." />
+        <exclude domain="file" path="course_cache/" />
+    </cloud-backup>
+    <device-transfer>
+        <exclude domain="database" path="." />
+        <exclude domain="file" path="course_cache/" />
+    </device-transfer>
+</data-extraction-rules>

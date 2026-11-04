@@ -1,0 +1,29 @@
+# 원본 다운로드·pbf·GraphHopper 그래프는 커밋하지 않는다(README 6장 다시 만들기 명령).
+# 서버가 읽는 정규화·파생 파일(각 5MB 이하)과 출처 문서만 넣는다.
+data/*
+!data/signals_busan.json
+!data/signals_busan_merged.json
+!data/roads_geumjeong.json
+!data/MANIFEST.json
+!data/public/
+data/public/*
+!data/public/zones/
+data/public/zones/*
+!data/public/zones/busan_school_zones.geojson
+!data/public/zones/busan_elderly_zones.geojson
+!data/public/zones/busan_accident_hotspots.geojson
+!data/public/zones/PROVENANCE.md
+!data/public/signals/
+data/public/signals/*
+!data/public/signals/PROVENANCE.md
+!data/public/roadnet/
+data/public/roadnet/*
+!data/public/roadnet/PROVENANCE.md
+!data/public/roadnet/README.md
+out/
+.venv/
+__pycache__/
+.pytest_cache/
+.env
+.env.*
+!.env.example

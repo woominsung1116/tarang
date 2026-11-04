@@ -1,0 +1,25 @@
+# 비밀값
+.env
+.env.*
+!.env.example
+# 빌드·캐시
+.gradle/
+build/
+.kotlin/
+local.properties
+*.iml
+.idea/
+captures/
+.venv/
+__pycache__/
+.pytest_cache/
+# 에이전트 상태·로그
+.omc/
+**/.omc/
+course-engine/out/
+.DS_Store
+# 로컬 전용(저장소에 올리지 않음)
+.claude/
+docs/pleos-sdk/
+contest-application-consent.docx
+docs/APPLICATION_DRAFT_*.md

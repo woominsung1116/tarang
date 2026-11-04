@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 주행 포그라운드 서비스 알림(drive/DriveForegroundService). 주행 화면 문구와 분리해 둔다. -->
+<resources>
+    <string name="drive_service_channel">주행 중 안내</string>
+    <string name="drive_service_text">타랑이 주행을 함께하고 있어요</string>
+</resources>

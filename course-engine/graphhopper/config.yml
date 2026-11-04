@@ -1,0 +1,26 @@
+graphhopper:
+  datareader.file: /data/south-korea-latest.osm.pbf
+  graph.location: /data/graph-cache
+  import.osm.ignored_highways: footway,cycleway,path,pedestrian,steps,bridleway,track,service
+  graph.encoded_values: car_access, car_average_speed, road_class, road_class_link, road_environment, max_speed, lanes, roundabout, surface, ferry_speed, max_width, max_height, max_weight, hgv, car_temporal_access
+  profiles:
+    - name: car
+      custom_model_files: [car.json]
+  # round_trip은 flexible 모드가 필요하므로 CH/LM 준비는 하지 않는다
+  profiles_ch: []
+  profiles_lm: []
+  # 코스는 10km 이하 순환이고, 목표 경로 분해(/v1/route-skills)는 서버가 직선 40km 이내만 보낸다.
+  # 실측 최대 방문 노드: 순환(부산 9곳 × 단계 1–4 × seed 24 + 10km 순환, 구역 반영) 12,772, 부산 끝↔끝 점 대 점은 README 1장.
+  # 큰 값은 요청 하나로 서버를 묶을 수 있다
+  routing.non_ch.max_waypoint_distance: 50000
+  routing.max_visited_nodes: 100000
+
+server:
+  application_connectors:
+    - type: http
+      port: 8989
+      bind_host: 0.0.0.0
+  admin_connectors:
+    - type: http
+      port: 8990
+      bind_host: localhost

@@ -1,0 +1,41 @@
+{
+ "generated": "2026-10-22T18:20:01Z",
+ "osm": {
+  "file": "data/south-korea-latest.osm.pbf",
+  "source": "Geofabrik south-korea-latest.osm.pbf",
+  "bytes": 289705086,
+  "sha256": "74c2033af787946237ce978c25909e6fd142d56d0edaa18c74519a802a66c401",
+  "roadDataTimestamp": "2026-10-20T20:23:47Z"
+ },
+ "graphhopper": {
+  "image": "israelhikingmap/graphhopper@sha256:7371676550916f6c8c1e79b8e3732c606bc945ff781effc54f6ac7aad78c7460",
+  "configSha256": "891c022dadb77c5fad2e6070744370d44df99c6b4edb83c1d1c2f9a44c29a137"
+ },
+ "derived": {
+  "data/signals_busan.json": {
+   "bytes": 18290,
+   "sha256": "6b3c4f03f5bfe9028b5b4055d92ee0e683e05e98fe099be2dbac3fd9c4543123"
+  },
+  "data/signals_busan_merged.json": {
+   "bytes": 214301,
+   "sha256": "786f27b4a8132b04fb36254c4e869c265f88907552ec6cf279176baf483691d4"
+  },
+  "data/roads_geumjeong.json": {
+   "bytes": 489855,
+   "sha256": "1aa29ea9248176e9f5cfb3ab85c04b654dfa96d0a7f1655fd636bfbe317d9a19"
+  },
+  "data/public/zones/busan_school_zones.geojson": {
+   "bytes": 2027475,
+   "sha256": "75e740472549151cd04cbe9776331be69c7ffafa3262dee7e54f8e5a22eed43f"
+  },
+  "data/public/zones/busan_elderly_zones.geojson": {
+   "bytes": 146778,
+   "sha256": "fa310d20af6ea527bf96fea5a0f87eb072fdba82a15e95cad914dd93a64f2923"
+  },
+  "data/public/zones/busan_accident_hotspots.geojson": {
+   "bytes": 4231994,
+   "sha256": "e486b073027c56a409acbe238bac67cb41a0422951d6e6e87e8f0ee4d1bdca04"
+  }
+ },
+ "rebuild": "uv run python scripts/build_all.py [--collect]"
+}
