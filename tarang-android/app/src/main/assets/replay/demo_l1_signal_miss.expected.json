@@ -1,0 +1,20 @@
+{
+ "schemaVersion": 1,
+ "replay": "demo_l1_signal_miss.json",
+ "courseId": "L1-35.2310-129.0840-s11-fe7a0388",
+ "spoken": [
+  "SKILL_PREVIEW",
+  "SCHOOL_ZONE_SPEED",
+  "TURN_SIGNAL_MISSING",
+  "SPEED_LIMIT_SUSTAINED"
+ ],
+ "events": {
+  "TURN_SIGNAL_OK": 2,
+  "TURN_SIGNAL_MISSED": 1,
+  "SPEEDING": 1,
+  "SCHOOL_ZONE_SPEEDING": 1,
+  "HARD_BRAKE": 0,
+  "NEW_WARNING": 0,
+  "OFF_COURSE": 0
+ }
+}

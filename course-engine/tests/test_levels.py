@@ -2,7 +2,7 @@ import re
 
 import pytest
 
-from taraang_course.levels import LEVELS, user_message, violations
+from tarang_course.levels import LEVELS, user_message, violations
 
 
 def amounts(level: int, counts: dict[str, int]) -> int:

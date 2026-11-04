@@ -49,7 +49,7 @@
 - **부산광역시_교통사고 다발지역 정보** OpenAPI [15164340](https://www.data.go.kr/data/15164340/openapi.do): 이용허락범위 제한 없음, 개발·운영 자동승인, 개발계정 1,000건/일. 절차: data.go.kr 로그인 → "활용신청" → 마이페이지의 일반 인증키(Decoding) 확인. 응답 필드(폴리곤 여부)는 키 발급 후 확인해야 한다.
 - 실제 보호구역 구간(도로 선형)이나 탄력 운영시간은 부산 데이터로는 찾지 못했다. 경기도 광주시처럼 보호구역 경계 공간정보를 공개한 지자체 사례는 있다(15120717).
 
-## 코스 서버에서 쓰는 방식 (`taraang_course/zones.py`)
+## 코스 서버에서 쓰는 방식 (`tarang_course/zones.py`)
 
 - 읽는 파일: `busan_school_zones.geojson`, `busan_elderly_zones.geojson`(시설 좌표 `lat`·`lon`과 `speedLimitKmh`만), `busan_accident_hotspots.geojson`(폴리곤, `year ≥ 2020`인 294곳). 300m 원 도형은 쓰지 않고 시설 좌표에서 반경을 다시 그린다. `graphhopper_areas_geumjeong.json`은 금정구 확인용이고 서버는 쓰지 않는다.
 - 반경: 기본 150m(`TARAANG_SCHOOL_ZONE_BUFFER_M`). 위 주의 3의 측정(300m 차단 시 부산대 앞 순환 실패) 때문이다.

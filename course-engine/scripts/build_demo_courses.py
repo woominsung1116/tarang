@@ -1,6 +1,6 @@
 """앱 번들 코스(오프라인 대체 + 에뮬레이터 시연)를 실행 중인 GraphHopper로 다시 만든다.
 
-출력: taraang-android/app/src/main/assets/courses/demo_pnu.json (ARCHITECTURE.md 4.1)
+출력: tarang-android/app/src/main/assets/courses/demo_pnu.json (ARCHITECTURE.md 4.1)
 사용: uv run python scripts/build_demo_courses.py [--gh http://localhost:8989]
 """
 
@@ -10,14 +10,14 @@ import json
 from datetime import UTC, datetime
 from pathlib import Path
 
-from taraang_course import engine
-from taraang_course.graphhopper import GraphHopperClient
-from taraang_course.signal_layer import default_signals_file, load_signal_index
-from taraang_course.roads import load_road_layer
-from taraang_course.zones import load_zone_layer
+from tarang_course import engine
+from tarang_course.graphhopper import GraphHopperClient
+from tarang_course.signal_layer import default_signals_file, load_signal_index
+from tarang_course.roads import load_road_layer
+from tarang_course.zones import load_zone_layer
 
 ROOT = Path(__file__).resolve().parents[1]
-OUT = ROOT.parent / "taraang-android" / "app" / "src" / "main" / "assets" / "courses" / "demo_pnu.json"
+OUT = ROOT.parent / "tarang-android" / "app" / "src" / "main" / "assets" / "courses" / "demo_pnu.json"
 
 ORIGIN = (35.2310, 129.0840)  # 부산대 정문 앞
 PLACE = "부산대 앞"

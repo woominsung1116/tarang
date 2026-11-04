@@ -1,8 +1,8 @@
 import pytest
 from conftest import make_gh_path, turn_point
 
-from taraang_course.analysis import Maneuver, analyze, classify, pick_waypoints
-from taraang_course.geo import SignalIndex, cumulative, haversine, point_at
+from tarang_course.analysis import Maneuver, analyze, classify, pick_waypoints
+from tarang_course.geo import SignalIndex, cumulative, haversine, point_at
 
 NO_SIGNALS = SignalIndex([])
 

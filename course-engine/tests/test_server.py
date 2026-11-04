@@ -8,8 +8,8 @@ import pytest
 from conftest import make_gh_path
 from fastapi.testclient import TestClient
 
-from taraang_course.graphhopper import GraphHopperClient
-from taraang_course.server import Settings, TTLCache, create_app
+from tarang_course.graphhopper import GraphHopperClient
+from tarang_course.server import Settings, TTLCache, create_app
 
 URL = "/v1/courses?lat=35.23101&lon=129.08399&level=1&count=2"
 
@@ -120,14 +120,43 @@ def test_graphhopper_5xx_is_503():
 
 
 def test_slow_graphhopper_hits_deadline():
+    """우리 전체 상한(deadline)은 경로 엔진 고장이 아니다: "잠시 후 다시" 503, 실패 기억(negative cache)도 하지 않는다."""
+    calls = {"n": 0}
+
     async def slow(request):
+        calls["n"] += 1
         await asyncio.sleep(1.0)
         return ok_handler(request)
 
     gh = GraphHopperClient("http://gh.test", transport=httpx.MockTransport(slow))
-    app = create_app(Settings(seeds=2, gh_timeout_s=0.05, deadline_s=0.1, signals_file=Path("/nonexistent")), client=gh)
-    with TestClient(app) as client:
+    settings = Settings(seeds=2, gh_timeout_s=0.05, deadline_s=0.1, nav_deadline_s=0.08, signals_file=Path("/nonexistent"))
+    with TestClient(create_app(settings, client=gh)) as client:
+        first = client.get(URL)
+        assert_error(first, 503, "UPSTREAM_UNAVAILABLE")
+        assert first.json()["error"]["message"] == "잠시 후 다시 시도해 주세요"
+        assert calls["n"] == 2
         assert_error(client.get(URL), 503, "UPSTREAM_UNAVAILABLE")
+        assert calls["n"] == 4  # 바로 다시 만들어 본다
+
+
+def test_slow_nav_check_still_returns_courses_within_deadline():
+    """내비 경유지 확인이 느리면 확인 마감에서 멈추고 round_trip 코스는 navMatch null로 준다(전체를 503으로 버리지 않는다)."""
+    by_seed = {s: make_gh_path([2] * (s + 1), distance=1500 + 100 * s) for s in range(4)}
+
+    async def handler(request):
+        body = json.loads(request.content)
+        if "round_trip.seed" in body:
+            return httpx.Response(200, json={"paths": [by_seed[body["round_trip.seed"]]]})
+        await asyncio.sleep(5.0)
+        return ok_handler(request)
+
+    gh = GraphHopperClient("http://gh.test", transport=httpx.MockTransport(handler))
+    settings = Settings(seeds=4, gh_timeout_s=0.2, deadline_s=1.0, nav_deadline_s=0.3, signals_file=Path("/nonexistent"))
+    with TestClient(create_app(settings, client=gh)) as client:
+        resp = client.get("/v1/courses?lat=35.231&lon=129.084&level=1&count=3")
+    assert resp.status_code == 200
+    courses = resp.json()["courses"]
+    assert len(courses) == 3 and all(c["debug"]["navMatch"] is None for c in courses)
 
 
 def test_no_route_is_404():
@@ -162,14 +191,34 @@ def test_errors_are_not_cached():
 
 
 def test_unexpected_error_is_500_without_details():
+    """처리 못 한 예외도 미들웨어 안에서 표준 오류 JSON + 보안 헤더 + 한 줄 JSON 로그로 끝난다(서버 밖으로 새지 않는다)."""
+    import logging
+
+    from tarang_course.server import JsonFormatter
+
     def broken(request):
         raise RuntimeError("secret internal detail")
 
-    client, _ = make_client(broken, raise_server_exceptions=False)
-    with client:
-        resp = client.get(URL)
+    lines = []
+    handler = logging.Handler()
+    handler.emit = lambda record: lines.append(JsonFormatter().format(record))
+    logger = logging.getLogger("tarang_course")
+    logger.addHandler(handler)
+    try:
+        client, _ = make_client(broken)  # raise_server_exceptions=True: 예외가 앱 밖으로 나오면 여기서 터진다
+        with client:
+            resp = client.get(URL)
+    finally:
+        logger.removeHandler(handler)
     assert_error(resp, 500, "INTERNAL")
     assert "secret" not in resp.text
+    assert resp.headers["X-Content-Type-Options"] == "nosniff"
+    assert resp.headers["Cache-Control"] == "no-store"
+    events = [json.loads(line) for line in lines]
+    assert all("\n" not in line for line in lines)
+    unhandled = [e for e in events if e["event"] == "unhandled"]
+    assert len(unhandled) == 1 and "RuntimeError" in unhandled[0]["exc"]
+    assert [e["status"] for e in events if e["event"] == "request"] == [500]
 
 
 def test_healthz_ok():
@@ -308,6 +357,15 @@ def test_settings_from_env():
         {"TARAANG_SCHOOL_ZONE_BUFFER_M": "0"},
         {"TARAANG_SCHOOL_ZONE_BUFFER_M": "5000"},
         {"TARAANG_SCHOOL_ZONE_BUFFER_M": "넓게"},
+        {"TARAANG_DEADLINE_S": "nan"},
+        {"TARAANG_DEADLINE_S": "inf"},
+        {"TARAANG_GH_TIMEOUT_S": "nan"},
+        {"TARAANG_CACHE_TTL_S": "inf"},
+        {"TARAANG_NEGATIVE_TTL_S": "NaN"},
+        {"TARAANG_KEEP_ALIVE_S": "infinity"},
+        {"TARAANG_SCHOOL_ZONE_BUFFER_M": "nan"},
+        {"TARAANG_NAV_DEADLINE_S": "nan"},
+        {"TARAANG_NAV_DEADLINE_S": "6"},  # 전체 상한보다 짧아야 한다
     ],
 )
 def test_settings_reject_bad_env(env):
@@ -391,7 +449,7 @@ def test_gh_url_rejects_userinfo_and_missing_host(url):
 
 
 def test_logged_graphhopper_address_is_host_and_port_only():
-    from taraang_course.server import url_host
+    from tarang_course.server import url_host
 
     assert url_host("http://localhost:8989/route?key=x") == "localhost:8989"
     assert url_host("https://gh.example") == "gh.example:443"
@@ -400,7 +458,8 @@ def test_logged_graphhopper_address_is_host_and_port_only():
 def test_defaults_bind_loopback_and_limit_load():
     s = Settings()
     assert s.host == "127.0.0.1"
-    assert (s.max_inflight, s.limit_concurrency, s.keep_alive_s) == (16, 64, 5.0)
+    assert (s.max_inflight, s.limit_concurrency, s.keep_alive_s) == (4, 64, 5.0)
+    assert s.nav_deadline_s < s.deadline_s
 
 
 ROUTE_URL = "/v1/route-skills?fromLat=35.231&fromLon=129.084&toLat=35.158&toLon=129.059"
@@ -463,7 +522,7 @@ def test_focus_is_validated_and_part_of_the_cache_key():
 
 
 def test_analysis_bug_is_500_not_retryable_503(monkeypatch):
-    from taraang_course import engine
+    from tarang_course import engine
 
     def boom(*args, **kwargs):
         raise ZeroDivisionError("bug")
@@ -477,7 +536,7 @@ def test_analysis_bug_is_500_not_retryable_503(monkeypatch):
 
 
 def test_graphhopper_path_shape_is_validated():
-    from taraang_course.graphhopper import valid_path
+    from tarang_course.graphhopper import valid_path
 
     ok = make_gh_path([2, -2])
     assert valid_path(ok)

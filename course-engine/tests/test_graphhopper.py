@@ -5,7 +5,7 @@ import httpx
 import pytest
 from conftest import make_gh_path
 
-from taraang_course.graphhopper import GraphHopperClient, RouteNotFound, UpstreamUnavailable
+from tarang_course.graphhopper import GraphHopperClient, RouteNotFound, UpstreamUnavailable
 
 
 def client_with(handler) -> GraphHopperClient:

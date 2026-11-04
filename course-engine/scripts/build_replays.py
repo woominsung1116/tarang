@@ -28,10 +28,10 @@ from collections import Counter
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from taraang_course.geo import bearing, cumulative, point_at
+from tarang_course.geo import bearing, cumulative, point_at
 
 ROOT = Path(__file__).resolve().parents[1]
-ASSETS = ROOT.parent / "taraang-android" / "app" / "src" / "main" / "assets"
+ASSETS = ROOT.parent / "tarang-android" / "app" / "src" / "main" / "assets"
 COURSES = ASSETS / "courses" / "demo_pnu.json"
 REPLAY_DIR = ASSETS / "replay"
 
@@ -284,7 +284,8 @@ def signal_miss_scenario(course: dict) -> Scenario:
             ],
             school_zone=(z0, z1),
             missed_signal={missed["index"]},
-            expect_spoken=["SCHOOL_ZONE_AHEAD", "SCHOOL_ZONE_SPEED", "TURN_SIGNAL_MISSING", "SPEED_LIMIT_SUSTAINED"],
+            # 기본 설정 기준(보호구역 진입 예고는 기본 꺼짐 → 그 자리에 연습 기술 예고).
+            expect_spoken=["SKILL_PREVIEW", "SCHOOL_ZONE_SPEED", "TURN_SIGNAL_MISSING", "SPEED_LIMIT_SUSTAINED"],
             expect_events={"TURN_SIGNAL_MISSED": 1, "SCHOOL_ZONE_SPEEDING": 1, "SPEEDING": 1, "HARD_BRAKE": 0,
                            "NEW_WARNING": 0, "OFF_COURSE": 0},
         )

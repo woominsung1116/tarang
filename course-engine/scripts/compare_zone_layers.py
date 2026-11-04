@@ -14,12 +14,12 @@ from collections import Counter
 from compare_signal_layers import COUNT, LEVELS
 from compare_signal_layers import ORIGINS as SIGNAL_ORIGINS
 
-from taraang_course import engine
-from taraang_course.analysis import SCHOOL_ZONE
-from taraang_course.graphhopper import GraphHopperClient
-from taraang_course.levels import LEVELS as SPECS
-from taraang_course.signal_layer import MERGED_FILE, load_signal_index
-from taraang_course.zones import load_zone_layer
+from tarang_course import engine
+from tarang_course.analysis import SCHOOL_ZONE
+from tarang_course.graphhopper import GraphHopperClient
+from tarang_course.levels import LEVELS as SPECS
+from tarang_course.signal_layer import MERGED_FILE, load_signal_index
+from tarang_course.zones import load_zone_layer
 
 # 시연 출발지 + 부산 8곳: 신호 비교의 8곳(부산대 정문 포함)에 해운대를 더했다
 ORIGINS = {**SIGNAL_ORIGINS, "해운대": (35.163, 129.163)}

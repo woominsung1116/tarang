@@ -5,12 +5,12 @@ import pytest
 from conftest import STEP_DEG, make_gh_path
 from shapely.geometry import Point, shape
 
-from taraang_course import engine, zones
-from taraang_course.analysis import SCHOOL_ZONE, analyze
-from taraang_course.geo import SignalIndex, haversine
-from taraang_course.graphhopper import RouteNotFound
-from taraang_course.levels import AVOID_ZONES, LEVELS, violations
-from taraang_course.zones import Facility, ZoneLayer
+from tarang_course import engine, zones
+from tarang_course.analysis import SCHOOL_ZONE, analyze
+from tarang_course.geo import SignalIndex, haversine
+from tarang_course.graphhopper import RouteNotFound
+from tarang_course.levels import AVOID_ZONES, LEVELS, violations
+from tarang_course.zones import Facility, ZoneLayer
 
 M_PER_DEG_LAT = 111_195
 LON = 129.0

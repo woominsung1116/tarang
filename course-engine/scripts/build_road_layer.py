@@ -16,7 +16,7 @@ from collections import Counter
 from datetime import UTC, datetime
 from pathlib import Path
 
-from taraang_course import roads
+from tarang_course import roads
 
 ROOT = Path(__file__).resolve().parents[1]
 PBF = ROOT / "data" / "south-korea-latest.osm.pbf"

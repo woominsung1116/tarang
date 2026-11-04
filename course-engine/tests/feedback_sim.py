@@ -1,4 +1,4 @@
-"""앱 FeedbackEngine(taraang-android/app/src/main/java/com/taraang/app/feedback/)의 파이썬 이식.
+"""앱 FeedbackEngine(tarang-android/app/src/main/java/com/taraang/app/feedback/)의 파이썬 이식.
 
 리플레이 로그가 앱에서 실제로 어떤 문장을 말하고 어떤 이벤트를 남기는지 서버 쪽 테스트에서 확인하려는 용도다.
 Kotlin 구현이 정답이며, 여기 값과 동작은 그 파일들(FeedbackConfig, SpeedEstimator, TurnTracker, CourseTrackers,
@@ -10,7 +10,7 @@ import math
 from collections import deque
 from dataclasses import dataclass, field
 
-from taraang_course.geo import haversine
+from tarang_course.geo import haversine
 
 # FeedbackConfig
 MIN_GAP_MS = 20_000
@@ -41,6 +41,7 @@ HARD_SPEED_WINDOW_MS = 500
 HARD_REPEAT = 3
 HARD_QUIET_MS = 5_000
 OFF_COURSE_M = 60.0
+PROGRESS_JUMP_SLACK_M = 120.0  # FeedbackConfig.progressJumpSlackM
 OFF_COURSE_SUSTAIN_MS = 5_000
 SPEED_WINDOW_MS = 1_500
 ALPHA = 0.6
@@ -62,6 +63,8 @@ PRIORITY = {
     "SKILL_PREVIEW": 5,
     "HARD_BRAKE_REPEAT": 6,
 }
+# FeedbackType.defaultEnabled. 보호구역 진입 예고는 차량 내비가 이미 안내해 기본으로 끈다(설정에서 켤 수 있다).
+DEFAULT_ENABLED = frozenset(PRIORITY) - {"SCHOOL_ZONE_AHEAD"}
 MANEUVER_KINDS = {"LEFT", "RIGHT", "UTURN", "ROUNDABOUT"}
 
 
@@ -216,16 +219,28 @@ class PathProgress:
     def __init__(self, path: CoursePath):
         self.path = path
         self.progress = None
+        self.last_pos = None
+        self.moved_since_advance = 0.0  # 진행 거리가 마지막으로 늘어난 뒤 움직인 직선거리 합
 
     def update(self, pos):
         if not self.path.usable:
             return self.progress
-        last = self.progress or 0.0
+        if self.last_pos is not None:
+            self.moved_since_advance += dist(self.last_pos, pos)
+        self.last_pos = pos
+        current = self.progress
+        last = current or 0.0
         near = self.path.project(pos, last - PROGRESS_BACK_M, last + PROGRESS_AHEAD_M)
         if near is None or near[0] > OFF_COURSE_M:
             near = self.path.first_within(pos, OFF_COURSE_M, last)
-        if near is not None:
-            self.progress = max(near[1], last)  # 뒤로 가지 않는다
+        if near is None:
+            return self.progress
+        # 한 번에 늘 수 있는 양은 실제로 움직인 거리 + 여유까지(유턴 후 순환 코스 끝으로 건너뛰지 않게). 첫 위치는 그대로 받는다.
+        if current is not None and near[1] - last > self.moved_since_advance + PROGRESS_JUMP_SLACK_M:
+            return self.progress
+        if near[1] > last:
+            self.moved_since_advance = 0.0
+        self.progress = max(near[1], last)  # 뒤로 가지 않는다
         return self.progress
 
 
@@ -319,7 +334,10 @@ class Result:
         return [t for _, t in self.events]
 
 
-def run(course: dict, frames: list[dict]) -> Result:
+def run(course: dict, frames: list[dict], enabled: frozenset[str] = DEFAULT_ENABLED) -> Result:
+    """enabled: 설정에서 켠 피드백 타입(기본값 = 앱 기본 설정). NEW_WARNING은 끌 수 없다.
+    꺼진 타입도 규칙 판정·기록(이벤트)은 그대로 하고 말할 후보에서만 뺀다(앱 FeedbackEngine과 같다)."""
+    enabled = enabled | {"NEW_WARNING"}
     res = Result()
     speed_est = SpeedEstimator()
     turns = TurnTracker()
@@ -446,6 +464,7 @@ def run(course: dict, frames: list[dict]) -> Result:
                 cands.append("HARD_BRAKE_REPEAT")
 
         # FeedbackArbiter
+        cands = [c for c in cands if c in enabled]
         if turns.near or not cands:
             continue
         for c in sorted(cands, key=PRIORITY.get):

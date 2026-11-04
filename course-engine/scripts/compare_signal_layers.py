@@ -11,11 +11,11 @@ import asyncio
 from collections import Counter
 from pathlib import Path
 
-from taraang_course import engine
-from taraang_course.graphhopper import GraphHopperClient
-from taraang_course.signal_layer import MERGED_FILE, OSM_ONLY_FILE, load_signal_index
-from taraang_course.roads import load_road_layer
-from taraang_course.zones import load_zone_layer
+from tarang_course import engine
+from tarang_course.graphhopper import GraphHopperClient
+from tarang_course.signal_layer import MERGED_FILE, OSM_ONLY_FILE, load_signal_index
+from tarang_course.roads import load_road_layer
+from tarang_course.zones import load_zone_layer
 
 # 시연 출발지(부산대 정문) + 부산 8곳(서버 지연 측정과 같은 점)
 ORIGINS = {

@@ -1,4 +1,4 @@
-# 타랑 (Taraang)
+# 타랑 (Tarang)
 
 ![타랑 — 초보 운전, 옆자리에서 같이 타요](docs/images/thumbnail@2x.png)
 
@@ -10,12 +10,12 @@
 
 ## APK
 
-`apk/TEAM_Taraang_release.apk` — release 빌드(versionName 0.1.0, minSdk 28, targetSdk 35). 공모전 시연용으로 debug 키로 서명했다.
+`apk/우민성_Tarang_release.apk` — release 빌드(versionName 0.1.0, minSdk 28, targetSdk 35). 공모전 시연용으로 debug 키로 서명했다.
 
 ## 실행 방법
 
 1. Android Studio에서 Pleos Connect 시스템 이미지(Android 14, API 34, Automotive)로 AVD를 만든다. ([Pleos 에뮬레이터 가이드](https://document.pleos.ai/docs/connect/guide/getting-started/application-development/setup-connect-sdk-emulator))
-2. APK 설치: `adb install apk/TEAM_Taraang_release.apk`
+2. APK 설치: `adb install apk/우민성_Tarang_release.apk`
 3. 앱을 실행하면 부산대 정문 앞 시연 코스(단계 1–3, 각 3개)가 들어 있다. release 빌드는 코스 서버 없이 앱에 들어 있는 코스로 동작한다.
 4. 코스 상세 화면에서 차량 신호 대신 시연 리플레이를 골라 재생하면 주행 코칭과 복기를 확인할 수 있다.
    - `demo_l1_signal_miss`: 어린이보호구역 예고 → 보호구역 속도 → 방향지시등 누락 → 제한속도 초과
@@ -33,7 +33,7 @@
 직접 빌드:
 
 ```sh
-cd taraang-android
+cd tarang-android
 ./gradlew assembleRelease     # app/build/outputs/apk/release/app-release.apk
 ./gradlew testDebugUnitTest   # 단위 테스트
 ```
@@ -44,7 +44,7 @@ cd taraang-android
 
 | 경로 | 내용 |
 | --- | --- |
-| `taraang-android/` | 차량 앱. 구조·계약은 `taraang-android/ARCHITECTURE.md` |
+| `tarang-android/` | 차량 앱. 구조·계약은 `tarang-android/ARCHITECTURE.md` |
 | `course-engine/` | 연습 코스 생성 서버(FastAPI + GraphHopper + 공공데이터) |
 | `docs/research/` | 판정 기준값 사실 검증, 지도 API 검토 |
 | `IDEA_타랑.md` | 기획 |
@@ -53,3 +53,5 @@ cd taraang-android
 ## 데이터 출처
 
 © OpenStreetMap contributors ([ODbL 1.0](https://opendatacommons.org/licenses/odbl/)), 공공데이터포털(부산 신호, 전국 어린이·노인보호구역, 교통사고다발지역, 국가교통정보센터 표준노드링크), [GraphHopper](https://github.com/graphhopper/graphhopper) (Apache 2.0).
+
+대표 이미지 배경 사진: [RAPHAEL MAKSIAN](https://unsplash.com/@photograffihk), [Unsplash](https://unsplash.com/photos/parked-black-hyundai-vehicle-lZp73a6-aK0) (Unsplash License).

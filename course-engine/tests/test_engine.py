@@ -5,9 +5,9 @@ from datetime import UTC, datetime
 import pytest
 from conftest import make_gh_path, turn_point
 
-from taraang_course import engine
-from taraang_course.geo import SignalIndex
-from taraang_course.graphhopper import RouteNotFound, UpstreamUnavailable
+from tarang_course import engine
+from tarang_course.geo import SignalIndex
+from tarang_course.graphhopper import RouteNotFound, UpstreamUnavailable
 
 NOW = datetime(2026, 10, 22, 8, 0, tzinfo=UTC)
 COURSE_KEYS = {"id", "level", "title", "distanceM", "path", "waypoints", "maneuvers", "skillCounts", "warnings", "debug"}
@@ -279,3 +279,89 @@ def test_route_skills_breaks_down_a_point_to_point_route():
 def test_route_skills_without_route_is_no_course():
     with pytest.raises(engine.NoCourse):
         asyncio.run(engine.route_skills(FakeClient({}), SignalIndex([]), (35.0, 129.0), (35.05, 129.0)))
+
+
+class StubZones:
+    """구역 감점·차단을 custom_model에 붙이기만 하는 구역 레이어. 보호구역 진입은 없다."""
+
+    attribution: list = []
+    buffer_m = 150
+
+    def custom_model(self, base, factors, lat, lon, radius_m):
+        return {**base, "areas": {"type": "FeatureCollection", "features": [{"id": "z"}]}}
+
+    def school_entries(self, path):
+        return []
+
+
+def test_zone_relaxed_retry_still_runs_when_one_seed_hit_an_upstream_error():
+    """구역을 건 seed 하나가 GraphHopper 오류, 나머지는 경로 없음이어도 구역 없이 다시 만든다(404가 아니라 코스)."""
+
+    class ZoneClient(FakeClient):
+        async def round_trip(self, lat, lon, distance_m, seed, custom_model):
+            self.calls.append((distance_m, seed))
+            if "areas" in custom_model:
+                raise UpstreamUnavailable("ReadTimeout") if seed == 0 else RouteNotFound("boxed in")
+            return make_gh_path([2], distance=2000)
+
+    client = ZoneClient({})
+    body = asyncio.run(engine.generate(client, SignalIndex([]), 35.231, 129.084, 1, 3, seeds=4, now=NOW, zones=StubZones()))
+    assert body["courses"]
+    assert len(client.calls) == 8  # 구역 4 + 구역 없이 4
+
+
+def test_zone_retry_skipped_when_every_seed_hit_an_upstream_error():
+    class DownClient(FakeClient):
+        async def round_trip(self, lat, lon, distance_m, seed, custom_model):
+            self.calls.append((distance_m, seed))
+            raise UpstreamUnavailable("ConnectError")
+
+    client = DownClient({})
+    with pytest.raises(UpstreamUnavailable):
+        asyncio.run(engine.generate(client, SignalIndex([]), 35.231, 129.084, 1, 3, seeds=4, now=NOW, zones=StubZones()))
+    assert len(client.calls) == 4  # 죽은 경로 엔진에 한 번 더 보내지 않는다
+
+
+class SlowNavClient(FakeClient):
+    """round_trip은 바로, 내비 경유지 확인은 delay_s 뒤에 답한다."""
+
+    def __init__(self, by_seed, delay_s):
+        super().__init__(by_seed)
+        self.delay_s = delay_s
+        self.nav_calls = 0
+
+    async def route(self, points, custom_model=None):
+        self.nav_calls += 1
+        await asyncio.sleep(self.delay_s)
+        return nav_300m_north(points)
+
+
+def test_nav_deadline_keeps_round_trip_courses_unverified():
+    """내비 확인 마감을 넘기면 확인을 멈추고, 이미 만든 코스는 navMatch None(통과)으로 준다. 버리지 않는다."""
+    by_seed = {s: make_gh_path([2] * (s + 1), distance=1500 + 100 * s) for s in range(4)}
+    client = SlowNavClient(by_seed, delay_s=5.0)
+
+    async def go():
+        loop = asyncio.get_running_loop()
+        started = loop.time()
+        p = await engine.plan(client, SignalIndex([]), 35.0, 129.0, 1, 3, seeds=4, now=NOW, nav_deadline=started + 0.1)
+        return p, loop.time() - started
+
+    p, took = asyncio.run(go())
+    assert took < 1.0
+    body = engine.render(p, 3)
+    assert len(body["courses"]) == 3
+    assert all(c["debug"]["navMatch"] is None and len(c["waypoints"]) == 2 for c in body["courses"])
+    assert all(engine.WARN_NAV_DIFFERS not in c["warnings"] for c in body["courses"])
+
+
+def test_passed_nav_deadline_sends_no_nav_requests():
+    client = SlowNavClient({0: make_gh_path([2, 2], distance=1500)}, delay_s=0.0)
+
+    async def go():
+        deadline = asyncio.get_running_loop().time() - 1
+        return await engine.plan(client, SignalIndex([]), 35.0, 129.0, 1, 3, seeds=2, now=NOW, nav_deadline=deadline)
+
+    p = asyncio.run(go())
+    assert client.nav_calls == 0
+    assert [p.nav[c.seed][1] for c in p.chosen] == [None]

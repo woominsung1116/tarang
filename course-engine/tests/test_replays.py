@@ -11,9 +11,9 @@ from pathlib import Path
 import feedback_sim
 import pytest
 
-from taraang_course.geo import haversine
+from tarang_course.geo import haversine
 
-ASSETS = Path(__file__).resolve().parents[2] / "taraang-android" / "app" / "src" / "main" / "assets"
+ASSETS = Path(__file__).resolve().parents[2] / "tarang-android" / "app" / "src" / "main" / "assets"
 COURSES = {c["id"]: c for c in json.loads((ASSETS / "courses" / "demo_pnu.json").read_text())["courses"]}
 FRAME_KEYS = {"t", "lat", "lon", "heading", "speedLimitKmh", "turnSignal", "brake", "warnings", "nextTurn", "caution"}
 REPLAYS = ["demo_l1_signal_miss.json", "demo_l2_warning_brake.json"]
@@ -103,8 +103,9 @@ def judged_turns(course: dict) -> int:
 
 
 def test_signal_miss_replay_in_app():
+    # 기본 설정: 보호구역 진입 예고(SCHOOL_ZONE_AHEAD)는 차량 내비가 하므로 꺼져 있고, 그 자리에 연습 기술 예고가 나간다.
     r = simulate("demo_l1_signal_miss.json")
-    assert r.spoken_types() == ["SCHOOL_ZONE_AHEAD", "SCHOOL_ZONE_SPEED", "TURN_SIGNAL_MISSING", "SPEED_LIMIT_SUSTAINED"]
+    assert r.spoken_types() == ["SKILL_PREVIEW", "SCHOOL_ZONE_SPEED", "TURN_SIGNAL_MISSING", "SPEED_LIMIT_SUSTAINED"]
     events = Counter(r.event_types())
     assert events["TURN_SIGNAL_MISSED"] == 1
     course = COURSES[load("demo_l1_signal_miss.json")["courseId"]]
@@ -113,6 +114,14 @@ def test_signal_miss_replay_in_app():
     assert events["SPEEDING"] == 1
     for absent in ("HARD_BRAKE", "NEW_WARNING", "OFF_COURSE"):
         assert events[absent] == 0, absent
+
+
+def test_school_zone_ahead_is_spoken_when_the_user_turns_it_on():
+    data = load("demo_l1_signal_miss.json")
+    r = feedback_sim.run(COURSES[data["courseId"]], data["frames"], enabled=feedback_sim.DEFAULT_ENABLED | {"SCHOOL_ZONE_AHEAD"})
+    assert r.spoken_types() == ["SCHOOL_ZONE_AHEAD", "SCHOOL_ZONE_SPEED", "TURN_SIGNAL_MISSING", "SPEED_LIMIT_SUSTAINED"]
+    # 끄든 켜든 기록(이벤트)은 같다: 설정은 말할지 말지만 바꾼다.
+    assert Counter(r.event_types()) == Counter(simulate("demo_l1_signal_miss.json").event_types())
 
 
 def test_warning_brake_replay_in_app():

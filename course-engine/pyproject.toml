@@ -1,5 +1,5 @@
 [project]
-name = "taraang-course"
+name = "tarang-course"
 version = "0.1.0"
 description = "타랑 연습 코스 생성 서버 (GraphHopper round_trip + OSM)"
 requires-python = ">=3.12"
@@ -20,7 +20,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
-packages = ["taraang_course"]
+packages = ["tarang_course"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

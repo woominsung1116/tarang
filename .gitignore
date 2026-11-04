@@ -23,3 +23,6 @@ course-engine/out/
 docs/pleos-sdk/
 contest-application-consent.docx
 docs/APPLICATION_DRAFT_*.md
+docs/*접수양식*.docx
+docs/*.docx
+docs/.omc/

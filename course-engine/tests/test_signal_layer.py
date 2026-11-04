@@ -2,9 +2,9 @@ import json
 
 import pytest
 
-from taraang_course import signal_layer as sl
-from taraang_course.analysis import analyze
-from taraang_course.geo import haversine
+from tarang_course import signal_layer as sl
+from tarang_course.analysis import analyze
+from tarang_course.geo import haversine
 
 from conftest import make_gh_path, turn_point
 

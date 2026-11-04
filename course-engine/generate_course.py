@@ -1,4 +1,4 @@
-"""연습 코스 생성 CLI. 엔진은 taraang_course 패키지에 있다.
+"""연습 코스 생성 CLI. 엔진은 tarang_course 패키지에 있다.
 
 사용:
   uv run --no-project --with osmium python generate_course.py signals data/south-korea-latest.osm.pbf
@@ -27,11 +27,11 @@ def extract_signals(pbf: str) -> None:
 
 
 async def course(lat: float, lon: float, level: int, count: int, seeds: int, gh: str) -> None:
-    from taraang_course import engine
-    from taraang_course.graphhopper import GraphHopperClient
-    from taraang_course.signal_layer import default_signals_file, load_signal_index
-    from taraang_course.roads import load_road_layer
-    from taraang_course.zones import load_zone_layer
+    from tarang_course import engine
+    from tarang_course.graphhopper import GraphHopperClient
+    from tarang_course.signal_layer import default_signals_file, load_signal_index
+    from tarang_course.roads import load_road_layer
+    from tarang_course.zones import load_zone_layer
 
     signals = load_signal_index(default_signals_file())
     client = GraphHopperClient(gh)

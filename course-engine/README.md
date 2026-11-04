@@ -3,10 +3,10 @@
 초보 운전자 연습용 순환 코스를 만드는 서버. 출발지에서 GraphHopper `round_trip`으로 후보를 여러 개 만들고,
 회전 안내를 운전 기술(우회전, 신호 좌회전, 신호 정보 없는 좌회전, 유턴, 회전교차로)로 분해해 단계 조건에 맞춰 고른다.
 
-응답 형식과 API는 `../taraang-android/ARCHITECTURE.md` 4.1·4.2가 단일 출처다. 단계 정의는 `../IDEA_타랑.md` 3.2.
+응답 형식과 API는 `../tarang-android/ARCHITECTURE.md` 4.1·4.2가 단일 출처다. 단계 정의는 `../IDEA_타랑.md` 3.2.
 
 ```
-taraang_course/
+tarang_course/
   graphhopper.py  GraphHopper /route 클라이언트(타임아웃, 동시 요청 제한, 오류 2종 분류)
   analysis.py     instruction sign → 기술, 신호등 30m 조회, 경유지 3개
   levels.py       단계 1–4 조건과 위반 판정
@@ -51,7 +51,7 @@ Python 3.12, `uv` 사용.
 
 ```sh
 uv sync
-uv run python -m taraang_course.server     # 127.0.0.1:8000
+uv run python -m tarang_course.server     # 127.0.0.1:8000
 ```
 
 Android 에뮬레이터에서는 `http://10.0.2.2:8000`으로 접속한다(에뮬레이터의 10.0.2.2가 호스트 루프백이라 127.0.0.1 바인드로 된다). 같은 망의 다른 기기에서는 닿지 않는다.
@@ -75,18 +75,19 @@ curl "localhost:8000/v1/courses?lat=35.231&lon=129.084&level=3&focus=LEFT_TURN_S
 curl "localhost:8000/v1/route-skills?fromLat=35.231&fromLon=129.084&toLat=35.158&toLon=129.059"
 ```
 
-설정은 `taraang_course/server.py`의 `Settings` 한곳에 있고 `TARAANG_<필드 대문자>` 환경변수로 바꾼다. 잘못된 값이면 시작할 때 바로 실패한다.
+설정은 `tarang_course/server.py`의 `Settings` 한곳에 있고 `TARAANG_<필드 대문자>` 환경변수로 바꾼다. 잘못된 값(형식, 범위, `nan`·`inf`)이면 시작할 때 바로 실패한다.
 
 | 환경변수 | 기본값 | 뜻 |
 | --- | --- | --- |
 | `TARAANG_HOST` / `TARAANG_PORT` | `127.0.0.1` / `8000` | 바인드 주소. 외부 공개는 리버스 프록시로 |
 | `TARAANG_NEGATIVE_TTL_S` | `10` | GraphHopper 탓 503을 키별로 기억하는 시간 |
-| `TARAANG_MAX_INFLIGHT` | `16` | 동시에 만드는 서로 다른 (출발지, 단계) 수. 넘으면 바로 503 |
+| `TARAANG_MAX_INFLIGHT` | `4` | 동시에 만드는 서로 다른 (출발지, 단계) 수. 넘으면 바로 503 |
 | `TARAANG_LIMIT_CONCURRENCY` / `TARAANG_KEEP_ALIVE_S` | `64` / `5` | uvicorn 동시 연결 상한(넘으면 503), keep-alive 유휴 시간 |
 | `TARAANG_GH_URL` | `http://localhost:8989` | GraphHopper 주소(http/https만, `user:pass@` 거부). 로그에는 host:port만 남긴다 |
 | `TARAANG_GH_TIMEOUT_S` | `3` | GraphHopper 요청 1개 타임아웃. 전체 상한보다 짧아야 한다 |
 | `TARAANG_GH_MAX_CONCURRENCY` | `8` | GraphHopper 동시 요청 수 |
 | `TARAANG_DEADLINE_S` | `6` | 코스 요청 전체 상한. 앱 타임아웃(8초)보다 짧게 |
+| `TARAANG_NAV_DEADLINE_S` | `4` | 생성 시작부터 이 시간이 지나면 내비 경유지 확인을 멈춘다(3장 `waypoints`). 전체 상한보다 짧아야 한다 |
 | `TARAANG_SEEDS` | `24` | 요청당 후보 수(round_trip seed 0..N-1, 1–64) |
 | `TARAANG_CACHE_TTL_S` / `TARAANG_CACHE_MAX_ENTRIES` | `600` / `256` | 응답 캐시 유지 시간·최대 개수(LRU) |
 | `TARAANG_SIGNALS_FILE` | `data/signals_busan_merged.json`(없으면 `data/signals_busan.json`) | 신호 교차로 좌표. 파일이 없으면 모든 회전이 "신호 정보 없음" |
@@ -98,12 +99,14 @@ curl "localhost:8000/v1/route-skills?fromLat=35.231&fromLon=129.084&toLat=35.158
 - 입력: 위도 33–39, 경도 124–132, level 1–4, count 1–5(기본 3). 어긋나거나, 모르는·중복 인자, 쿼리 200자 초과, 본문 1KB 초과면 400 `INVALID_ARGUMENT`. 없는 경로(404/405)도 같은 오류 형식이다.
 - 출발지는 소수점 3자리(약 100m, 앱이 보내는 자리수와 같음)로 반올림한 뒤 생성·캐시·로그에 쓴다. 캐시 키는 출발지 + level이다. count와 상관없이 5개를 한 번 만들어 두고 count만큼 잘라 준다(대체 안내·출처는 잘라낸 코스 기준으로 다시 쓴다). 메모리 캐시, TTL·LRU. 오류는 캐시하지 않는다.
 - 같은 키의 동시 요청은 생성 작업 하나를 함께 기다린다. 앱 재시도가 GraphHopper 요청을 불리지 않는다.
-- GraphHopper 연결 실패·타임아웃으로 503을 준 키는 10초(`TARAANG_NEGATIVE_TTL_S`) 동안 기억해 바로 503으로 답한다. 앱 재시도·여러 사용자가 죽은 경로 엔진에 요청을 쌓지 않게. 성공만 길게(10분) 캐시한다.
+- GraphHopper 연결 실패·타임아웃으로 503을 준 키는 10초(`TARAANG_NEGATIVE_TTL_S`) 동안 기억해 바로 503으로 답한다. 앱 재시도·여러 사용자가 죽은 경로 엔진에 요청을 쌓지 않게. 성공만 길게(10분) 캐시한다. 우리 전체 상한(`TARAANG_DEADLINE_S`)을 넘긴 503은 붐빈 것이지 경로 엔진 고장이 아니라 기억하지 않는다.
 - 분석 중 예외(GraphHopper 응답은 `graphhopper.valid_path` 형식 검사를 이미 통과)는 우리 버그다. 나머지 seed로 응답하되 기록하고, 후보가 하나도 없으면 500 `INTERNAL`. 앱은 503만 다시 시도하므로 버그가 재시도로 불어나지 않는다.
-- 부하 상한: 생성 1건이 GraphHopper 요청 24–48개(+ 내비 경유지 확인 16–240개)라, 서로 다른 키의 생성이 이미 `TARAANG_MAX_INFLIGHT`(16)개 돌고 있으면 새 키는 기다리지 않고 503 `UPSTREAM_UNAVAILABLE` "잠시 후 다시 시도해 주세요"(앱은 저장·번들 코스로 대체). 캐시 히트와 이미 도는 키에 합류하는 요청은 막지 않는다. uvicorn 동시 연결 64, keep-alive 5초.
-- GraphHopper 연결 실패·타임아웃·5xx·깨진 응답으로 후보가 하나도 없거나 전체 상한을 넘기면 503 `UPSTREAM_UNAVAILABLE`. seed 일부만 실패하면 나머지로 응답한다.
+- 부하 상한: 생성 1건이 GraphHopper 요청 24–48개(+ 내비 경유지 확인 16–240개)이고 모든 생성이 GraphHopper 동시 요청 `TARAANG_GH_MAX_CONCURRENCY`(8)개를 나눠 쓴다. 서로 다른 키의 생성이 이미 `TARAANG_MAX_INFLIGHT`(4)개 돌고 있으면 새 키는 기다리지 않고 503 `UPSTREAM_UNAVAILABLE` "잠시 후 다시 시도해 주세요"(앱은 저장·번들 코스로 대체). 캐시 히트와 이미 도는 키에 합류하는 요청은 막지 않는다. uvicorn 동시 연결 64, keep-alive 5초.
+  - 왜 4: 모의 GraphHopper(요청당 30ms, 동시 8, 내비 일치도가 늘 미달이라 확인 240개를 다 쓰는 최악, 2026-11-04) 실측. 마감이 없던 때는 상한 16에서 서로 다른 키 4개는 4.2초에 모두 200, 6개는 2개만 200, 16개는 16개 모두 503(전체 상한에 걸려 GraphHopper 요청 1,764개를 버림). 내비 확인 마감을 둔 뒤 상한 16이면 16개 모두 200이지만 round_trip이 GraphHopper를 나눠 써 내비 확인을 거의 못 하고(코스 80개 모두 `navMatch` null), 요청당 100ms면 round_trip만 5초라 전체 상한 직전이다. 상한 4면 16개 중 4개 200(4.0초, 요청당 100ms에도 4.0초)·12개 즉시 503이고 전체 상한에 걸려 버리는 생성이 없다. 계산상 요청당 100ms에서 구역 재생성까지 해도 round_trip은 4×48개 ÷ 초당 80개 = 2.4초다.
+- 내비 확인 마감: 생성 시작부터 `TARAANG_NAV_DEADLINE_S`(4초)가 지나면 내비 경유지 확인을 멈추고, 확인을 끝내지 못한 코스는 `navMatch` null(통과로 본다, 3장)로 준다. 이미 만든 round_trip 후보를 전체 상한(503)으로 버리지 않게. 로그 `courses_generated`의 `nav_cut`.
+- GraphHopper 연결 실패·타임아웃·5xx·깨진 응답으로 후보가 하나도 없으면 503 `UPSTREAM_UNAVAILABLE` "경로 엔진에 연결할 수 없습니다". 전체 상한을 넘기면 503 `UPSTREAM_UNAVAILABLE` "잠시 후 다시 시도해 주세요". seed 일부만 실패하면 나머지로 응답한다.
 - 경로가 없거나(바다 위 등, GraphHopper 4xx) 거리 이상치만 남으면 404 `NO_COURSE`.
-- 그 밖의 예외는 500 `INTERNAL`, 응답에 내부 정보(스택트레이스)를 넣지 않는다.
+- 그 밖의 예외는 500 `INTERNAL`, 응답에 내부 정보(스택트레이스)를 넣지 않는다. 미들웨어 안에서 잡아 보안 헤더를 붙이고 `unhandled` JSON 로그 한 줄(스택트레이스는 `exc` 필드)로 남긴다.
 - 서버는 재시도하지 않는다. 요청 하나가 seed 24개를 병렬로 보내 일부 실패를 흡수하고, 재시도는 앱(GET 2회, 지수 백오프)이 한다.
 - API 문서 화면(/docs, /openapi.json)은 열지 않고 CORS를 허용하지 않는다. 응답에 `X-Content-Type-Options: nosniff`, `Cache-Control: no-store`.
 - 로그: 한 줄 JSON. 위치는 반올림한 값만 남기고 쿼리스트링은 남기지 않는다(uvicorn 접근 로그는 끔).
@@ -115,7 +118,7 @@ curl "localhost:8000/v1/route-skills?fromLat=35.231&fromLon=129.084&toLat=35.158
 | --- | --- | --- | --- | --- |
 | 1 출발·정지 | 2km | 고속도로·자동차전용도로·연결로 차단, 간선 0.2배, 제한속도 60 초과 0.1배 | 어린이·노인보호구역 0.05배, 사고다발지역 차단 | 신호 정보 없는 좌회전 0, 신호 좌회전 ≤2, 유턴 0, 회전교차로 0, 제한속도 50 초과 구간 0, 편도 3차로 이상 구간 0(금정구만) |
 | 2 기술 하나 | 3km | 고속도로·자동차전용도로·연결로 차단, 제한속도 60 초과 0.3배 | 1단계와 같음 | 신호 좌회전 ≥2, 신호 정보 없는 좌회전 0, 유턴 0, 회전교차로 0 |
-| 3 기술 조합 | 4.5km | 고속도로 차단, 자동차전용도로 0.2배, 간선 허용 | 셋 다 0.5배 | 기술 2종 이상, 신호 정보 없는 좌회전 0, 유턴 ≤1 |
+| 3 기술 조합 | 4.5km | 고속도로 차단, 자동차전용도로 0.2배, 간선 허용, 제한속도 70 초과 0.3배 | 셋 다 0.5배 | 기술 2종 이상, 신호 정보 없는 좌회전 0, 유턴 ≤1 |
 | 4 목표 경로 | 6km | 고속도로 차단, 자동차전용도로 0.5배 | 반영 안 함 | 기술 2종 이상, 유턴 ≤2, 신호 정보 없는 좌회전 허용 |
 
 - 회전 판정(GraphHopper instruction sign): -2/-3 좌회전, 2/3 우회전, -98/-8/8 유턴, 6 회전교차로. 약간 꺾기(±1), 차로 유지(±7)는 기술로 세지 않는다.
@@ -131,7 +134,7 @@ curl "localhost:8000/v1/route-skills?fromLat=35.231&fromLon=129.084&toLat=35.158
 - 보호구역·사고다발지역(`zones.py`, `levels.zone_factors`)
   - 요청마다 출발지에서 목표 거리 0.75배 안의 구역을 모아 종류별로 합치고 10m로 단순화해 GraphHopper `custom_model.areas`로 보낸다(부산대 앞 1–3단계 8–24KB). 어린이·노인보호구역은 시설 좌표 중심 150m 원(16각형), 사고다발지역은 원문 폴리곤 중 2020년 이후.
   - 짝수 seed는 감점·차단 모두, 홀수 seed는 차단(사고다발지역)만 쓴다. 감점을 모든 seed에 걸면 후보가 한쪽으로 몰려 조건에 딱 맞는 코스가 23 → 12개로 준다(아래 6장 측정). 보호구역 회피는 위 정렬의 두 번째 기준으로 다시 반영된다.
-  - 차단 구역 중 출발지 100m 안의 것은 뺀다(출발 도로를 못 찾는다). 그래도 구역 때문에 고를 코스가 없으면 구역 없이 한 번 더 만든다(`zones_relaxed` 로그).
+  - 차단 구역 중 출발지 100m 안의 것은 뺀다(출발 도로를 못 찾는다). 그래도 구역 때문에 고를 코스가 없으면 구역 없이 한 번 더 만든다(`zones_relaxed` 로그). seed 일부가 GraphHopper 오류여도 다시 만들고, 모두 오류(경로 엔진 고장)면 다시 만들지 않는다.
   - 경로가 어린이보호구역 원에 들어가는 지점마다 `SCHOOL_ZONE` maneuver(`confidence: "ESTIMATED"`)를 넣고 `skillCounts`에 센다. 원을 나와 50m 안에 다시 들어가면 한 구역으로 본다. 단계의 "기술 2종 이상"에는 세지 않는다.
   - 경고 문장: `어린이보호구역을 지나요 — 시속 30 이하로 천천히`(여러 곳이면 `어린이보호구역 2곳을 지나요 — …`), `dataNotes`에 `어린이보호구역은 학교·유치원 등 시설 주변 150m로 어림한 범위예요`.
 - 사용자 문장과 기계용 값을 나눈다. `warnings`·`dataNotes`는 초보 운전자에게 그대로 보이므로 쉬운 말로만 쓴다.
@@ -144,7 +147,7 @@ curl "localhost:8000/v1/route-skills?fromLat=35.231&fromLon=129.084&toLat=35.158
   - 왜: 코드 리뷰 실측에서 경유지 3개 중 가운데를 빼면 순환의 40–45%(L1-s3 1,356→795m), 고르게 1/3·2/3에 두어도 12–28%를 지름길로 건너뛰었다.
   - 후보(시험 순서): 연습 회전(좌회전·유턴·회전교차로, 모자라면 우회전) 중 순환을 가장 고르게 나누는 두 개의 30m 뒤 지점 → 잘 맞던 경로 거리 비율 쌍 8개(`analysis.FRACTION_PAIRS`) → 0.1 간격 격자. 코스당 16쌍까지.
   - 각 후보로 출발지 → 경유지1 → 경유지2 → 출발지를 GraphHopper 기본 차량 경로(내비 경로 탐색의 근사)로 이어 보고 일치도(`geo.route_match`)를 잰다: 코스를 25m 안에서 덮는 비율, 내비 경로가 코스 밖으로 새지 않는 비율, 길이 비 중 가장 작은 값. 0.95 이상이 나오면 멈춘다. `debug.navMatch`.
-  - **0.95 미만인 코스는 뺀다.** 순위대로 count개씩 확인하고 3×count개까지만 본다(부하 상한). 하나도 통과하지 못하면 가장 잘 맞는 코스 1개를 `내비 안내가 코스와 다를 수 있어요 — 화면의 코스 선을 따라가 주세요` 경고와 함께 준다(빈 응답보다 낫다). 그래서 count보다 적게 나올 수 있다. GraphHopper가 답하지 않으면 회전 기준 후보를 쓰고 `navMatch`는 null(통과로 본다).
+  - **0.95 미만인 코스는 뺀다.** 순위대로 count개씩 확인하고 3×count개까지만 본다(부하 상한). 하나도 통과하지 못하면 가장 잘 맞는 코스 1개를 `내비 안내가 코스와 다를 수 있어요 — 화면의 코스 선을 따라가 주세요` 경고와 함께 준다(빈 응답보다 낫다). 그래서 count보다 적게 나올 수 있다. GraphHopper가 답하지 않거나 내비 확인 마감(2장 `TARAANG_NAV_DEADLINE_S`)까지 확인을 끝내지 못하면 그때까지 가장 잘 맞은(없으면 회전 기준) 후보를 쓰고 `navMatch`는 null(통과로 본다).
   - 실측(부산 9곳 × 단계 1–3, count 5, 2026-10-23): 27칸 중 5개를 다 채운 칸 4, 통과 코스가 없어 경고 1개를 준 칸 6(남포 1·2단계 0.86, 부산대 정문 3단계 0.93 등), 나머지는 1–4개. 경유지 확인 GraphHopper 요청은 생성 1건당 16–240개, 생성 시간 0.17–1.3초. 격자를 37쌍 전부 시험해도 일치도가 올라가지 않아 16쌍으로 묶었다.
   - 번들(`demo_pnu.json`)은 seed 96·확인 32×count로 만들어 통과한 코스만 넣는다(단계마다 3개, 모두 0.96–1.0. seed 48·확인 16×count일 때는 2·3·1개였다). `scripts/check_waypoints.py`와 `tests/test_waypoints_live.py`(GraphHopper가 떠 있을 때)가 다시 확인한다.
 - `focus`(`/v1/courses?focus=LEFT_TURN_SIGNALIZED,U_TURN`): 목표 경로에서 뽑은 기술. 정렬에서 단계 조건 위반 다음 기준으로 "빠진 focus 기술 수"가 적은 코스를 앞에 둔다. 단계 조건은 바꾸지 않는다(1단계에 유턴을 focus로 줘도 유턴 코스는 위반 코스다). 모르는 기술 이름은 400. 캐시 키에 들어간다.
@@ -169,7 +172,7 @@ uv run pytest -q
 
 GraphHopper는 모킹한다(`httpx.MockTransport`, `tests/fixtures/gh_round_trip_pnu_s3.json`은 실제 응답에서 필요한 필드만 남긴 것). 실패 경로(GraphHopper 다운·타임아웃·5xx·깨진 응답, 잘못된 인자, 전체 상한 초과, 잘못된 설정)를 포함한다.
 
-`tests/test_replays.py`는 번들 리플레이를 앱 피드백 엔진에 넣었을 때 의도한 문장·기록만 나오는지 확인한다. 엔진은 `tests/feedback_sim.py`에 앱 Kotlin 코드(`taraang-android/.../feedback/`)를 그대로 옮겨 두었다(ARCHITECTURE.md 5장: 급제동 1초 14/15km/h·끝 속도 6km/h 이상, 깜빡이 판정 40m·앞 회전 40m 미만 제외, 보호구역 속도는 지점 제한속도 없으면 30). 앱 규칙이 바뀌면 같이 바꾼다. 급제동 기준값 경계 사례도 이 시뮬레이터로 확인한다.
+`tests/test_replays.py`는 번들 리플레이를 앱 피드백 엔진에 넣었을 때 의도한 문장·기록만 나오는지 확인한다. 엔진은 `tests/feedback_sim.py`에 앱 Kotlin 코드(`tarang-android/.../feedback/`)를 그대로 옮겨 두었다(ARCHITECTURE.md 5장: 급제동 1초 14/15km/h·끝 속도 6km/h 이상, 깜빡이 판정 40m·앞 회전 40m 미만 제외, 보호구역 속도는 지점 제한속도 없으면 30). 앱 규칙이 바뀌면 같이 바꾼다. 급제동 기준값 경계 사례도 이 시뮬레이터로 확인한다.
 
 `tests/test_zones.py`는 보호구역 진입 지점, custom_model 구성(종류별 규칙·출발지 차단 구역 제외·4단계 미반영), seed별 모델 분배, 구역 없이 다시 만들기, 실제 부산 데이터 크기를 확인한다.
 

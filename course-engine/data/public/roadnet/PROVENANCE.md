@@ -114,7 +114,7 @@ OSM 쪽: Geofabrik 한국 추출본 `data/south-korea-latest.osm.pbf`(2026-10-20
 - 이름 충돌 규칙은 보수적이다. 정관산업로(OSM)·번영로(링크)처럼 같은 도로의 다른 이름일 수 있는 경우도 버렸다. 그 결과 trunk 22.6%가 차로·속도 모두 없음이다.
 - 비교 표본이 작다(위 '비교' 참고).
 
-## 코스 서버에서 쓰는 방식 (`taraang_course/roads.py`)
+## 코스 서버에서 쓰는 방식 (`tarang_course/roads.py`)
 
 - `scripts/build_road_layer.py`가 `osm_way_attributes_geumjeong.json`(차로 수·제한속도·출처) + `osm_way_enrichment_geumjeong.json`(oneway) + OSM pbf의 way 선형을 합쳐 `data/roads_geumjeong.json`(1,611 way)을 만든다.
 - 경로를 10m 간격으로 짚어 15m 안·진행 방향 ±30° 안의 가장 가까운 way에 붙인다(GraphHopper 경로에 way id가 없어서).

@@ -3,12 +3,12 @@ import asyncio
 import pytest
 from conftest import make_gh_path
 
-from taraang_course import engine, roads
-from taraang_course.analysis import analyze
-from taraang_course.geo import SignalIndex
-from taraang_course.graphhopper import RouteNotFound
-from taraang_course.levels import LEVELS, user_message, violations
-from taraang_course.roads import FAST_ROAD, MULTI_LANE_ROAD, WIDE_ROAD, RoadLayer
+from tarang_course import engine, roads
+from tarang_course.analysis import analyze
+from tarang_course.geo import SignalIndex
+from tarang_course.graphhopper import RouteNotFound
+from tarang_course.levels import LEVELS, user_message, violations
+from tarang_course.roads import FAST_ROAD, MULTI_LANE_ROAD, WIDE_ROAD, RoadLayer
 
 M_PER_DEG_LAT = 111_195
 LAT0, LON0 = 35.0, 129.0

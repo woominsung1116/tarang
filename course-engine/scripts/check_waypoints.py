@@ -12,12 +12,12 @@ import json
 import sys
 from pathlib import Path
 
-from taraang_course.engine import NAV_MIN_MATCH
-from taraang_course.geo import route_match
-from taraang_course.graphhopper import GraphHopperClient
+from tarang_course.engine import NAV_MIN_MATCH
+from tarang_course.geo import route_match
+from tarang_course.graphhopper import GraphHopperClient
 
 ROOT = Path(__file__).resolve().parents[1]
-DEMO = ROOT.parent / "taraang-android" / "app" / "src" / "main" / "assets" / "courses" / "demo_pnu.json"
+DEMO = ROOT.parent / "tarang-android" / "app" / "src" / "main" / "assets" / "courses" / "demo_pnu.json"
 MIN_COVERAGE = NAV_MIN_MATCH
 
 
