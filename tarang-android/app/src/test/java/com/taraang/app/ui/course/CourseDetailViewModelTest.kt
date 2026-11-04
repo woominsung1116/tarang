@@ -6,6 +6,7 @@ import com.taraang.app.core.LatLng
 import com.taraang.app.core.userMessage
 import com.taraang.app.domain.model.LevelProgress
 import com.taraang.app.domain.model.SignalMode
+import com.taraang.app.domain.repository.LiveStart
 import com.taraang.app.domain.signal.NaviStart
 import com.taraang.app.domain.signal.NavigationLauncher
 import com.taraang.app.ui.MainDispatcherRule
@@ -71,9 +72,8 @@ class CourseDetailViewModelTest {
         val vm = vm(navi { _, _, _ -> AppResult.Err(AppError.Navigation(AppError.Navigation.NO_RESPONSE, "timeout")) })
         vm.startWithNavigation()
         assertEquals(listOf(Triple(courseId, SignalMode.LIVE, null)), controller.starts)
-        val notice = vm.events.first() as CourseDetailEvent.Notice
-        assertEquals(AppError.Navigation(AppError.Navigation.NO_RESPONSE, "").userMessage(), notice.message)
-        assertTrue(notice.message != AppError.Navigation("NO_NAVI", "").userMessage())
+        // 안내는 토스트가 아니라 주행 화면이 보여 준다(내비가 앞에 있는 동안 토스트는 안 보인다).
+        assertEquals(listOf(LiveStart(naviUnconfirmed = true)), controller.liveStarts)
         assertEquals(CourseDetailEvent.DriveStarted, vm.events.first())
         assertNull(vm.state.value.errorMessage)
     }
@@ -98,19 +98,12 @@ class CourseDetailViewModelTest {
     }
 
     @Test
-    fun `start far from the course origin is announced but still starts`() = runTest {
-        val here = LatLng(PreviewData.course.origin.lat + 0.05, PreviewData.course.origin.lon) // 약 5.6km 북쪽
+    fun `the navi's current position is handed to the drive as a hint for the far-start notice`() = runTest {
+        val here = LatLng(PreviewData.course.origin.lat + 0.05, PreviewData.course.origin.lon)
         val vm = vm(navi { _, _, _ -> naviOk(here) })
         vm.startWithNavigation()
-        val far = vm.events.first() as CourseDetailEvent.FarFromStart
-        assertTrue(far.distanceM in 5_000.0..6_000.0)
         assertEquals(CourseDetailEvent.DriveStarted, vm.events.first())
-        assertEquals(1, controller.starts.size)
-
-        // 가까우면 알리지 않는다.
-        val near = vm(navi { _, _, _ -> naviOk(PreviewData.course.origin) })
-        near.startWithNavigation()
-        assertEquals(CourseDetailEvent.DriveStarted, near.events.first())
+        assertEquals(listOf(LiveStart(positionHint = here)), controller.liveStarts)
     }
 
     @Test

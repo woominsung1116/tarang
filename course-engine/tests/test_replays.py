@@ -256,3 +256,11 @@ def test_expected_file_matches_replay_and_bundle(name):
     assert set(expected["events"]) == {
         "TURN_SIGNAL_OK", "TURN_SIGNAL_MISSED", "SPEEDING", "SCHOOL_ZONE_SPEEDING", "HARD_BRAKE", "NEW_WARNING", "OFF_COURSE"
     }
+
+
+def test_drive_that_never_reaches_the_course_is_not_off_course():
+    # 같은 주행을 동쪽으로 약 90km 옮기면 코스에 한 번도 오르지 않는다: "이탈"이 아니라 "아직 코스 밖"이다(앱 OffCourseDetector).
+    data = load("demo_l1_signal_miss.json")
+    far = [dict(f, lon=f["lon"] + 1.0) for f in data["frames"]]
+    r = feedback_sim.run(COURSES[data["courseId"]], far)
+    assert Counter(r.event_types())["OFF_COURSE"] == 0

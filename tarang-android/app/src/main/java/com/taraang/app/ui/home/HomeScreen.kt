@@ -39,6 +39,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.LineBreak
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -304,7 +305,10 @@ fun CourseCard(
             Column(Modifier.weight(1f)) {
                 Text(
                     course.title,
-                    style = MaterialTheme.typography.headlineSmall,
+                    // 한국어는 어절 단위로 줄을 바꾼다("좌·우회 / 전"처럼 단어 중간에서 끊기지 않게, API 33+에서 적용).
+                    style = MaterialTheme.typography.headlineSmall.copy(
+                        lineBreak = LineBreak(LineBreak.Strategy.Balanced, LineBreak.Strictness.Strict, LineBreak.WordBreak.Phrase),
+                    ),
                     color = Graphite,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis,

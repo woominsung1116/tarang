@@ -72,6 +72,19 @@ data class LiveDriveState(
     val finished: Boolean = false,
     /** 주행 중 새로 켜졌고 아직 켜진 경고. 비어 있지 않은 동안 화면은 경고를 보여 준다(ARCHITECTURE.md 5장). */
     val newWarnings: Set<WarningType> = emptySet(),
+    /** 코스 선에 한 번이라도 올라왔는가. 아래 두 안내는 올라오면 내린다. */
+    val joinedCourse: Boolean = false,
+    /** 아직 코스에 오르지 않았고 출발점에서 1km보다 멀면 그 거리. */
+    val farFromStartM: Double? = null,
+    /** 실차 시작 때 내비가 경로 요청에 답하지 않았다(요청은 갔을 수 있다). */
+    val naviUnconfirmed: Boolean = false,
+)
+
+/** 실차 시작 때 내비 단계에서 알게 된 것. 주행 화면 안내에 쓴다. */
+data class LiveStart(
+    val naviUnconfirmed: Boolean = false,
+    /** 경로 요청 직전 내비가 준 현재 위치. 첫 위치 신호가 오기 전 출발점 거리 안내에 쓴다. */
+    val positionHint: LatLng? = null,
 )
 
 /**
@@ -80,7 +93,7 @@ data class LiveDriveState(
  */
 interface DriveController {
     val state: StateFlow<LiveDriveState>
-    suspend fun start(course: Course, mode: SignalMode, replayAsset: String? = null): AppResult<DriveSession>
+    suspend fun start(course: Course, mode: SignalMode, replayAsset: String? = null, liveStart: LiveStart = LiveStart()): AppResult<DriveSession>
 
     /**
      * 실차 주행을 차량 내비로 넘기기 직전(앱이 아직 앞에 있을 때) 부른다. 주행 유지 장치(포그라운드 서비스)를 미리 켠다.

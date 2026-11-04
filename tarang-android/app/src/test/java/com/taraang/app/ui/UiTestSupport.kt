@@ -18,6 +18,7 @@ import com.taraang.app.domain.repository.DriveController
 import com.taraang.app.domain.repository.DriveRepository
 import com.taraang.app.domain.repository.GoalRepository
 import com.taraang.app.domain.repository.LiveDriveState
+import com.taraang.app.domain.repository.LiveStart
 import com.taraang.app.domain.repository.SettingsRepository
 import com.taraang.app.domain.signal.NaviStart
 import com.taraang.app.domain.signal.NavigationLauncher
@@ -114,6 +115,7 @@ class ScriptedDriveController(
 ) : DriveController by FakeDriveController() {
     override val state: StateFlow<LiveDriveState> = live
     val starts = mutableListOf<Triple<String, SignalMode, String?>>()
+    val liveStarts = mutableListOf<LiveStart>()
     val replayQueries = mutableListOf<String>()
     override suspend fun replayAssets(courseId: String): List<String> {
         replayQueries += courseId
@@ -125,7 +127,8 @@ class ScriptedDriveController(
     val keepAliveCalls = mutableListOf<String>()
     override fun prepareLiveStart() { keepAliveCalls += "prepare" }
     override fun cancelPreparedStart() { keepAliveCalls += "cancel" }
-    override suspend fun start(course: Course, mode: SignalMode, replayAsset: String?): AppResult<DriveSession> {
+    override suspend fun start(course: Course, mode: SignalMode, replayAsset: String?, liveStart: LiveStart): AppResult<DriveSession> {
+        liveStarts += liveStart
         starts += Triple(course.id, mode, replayAsset)
         return startResult
     }

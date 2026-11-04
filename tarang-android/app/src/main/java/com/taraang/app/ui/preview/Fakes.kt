@@ -28,6 +28,7 @@ import com.taraang.app.domain.repository.DriveController
 import com.taraang.app.domain.repository.DriveRepository
 import com.taraang.app.domain.repository.GoalRepository
 import com.taraang.app.domain.repository.LiveDriveState
+import com.taraang.app.domain.repository.LiveStart
 import com.taraang.app.domain.repository.SettingsRepository
 import com.taraang.app.domain.signal.NaviStart
 import com.taraang.app.domain.signal.NavigationLauncher
@@ -173,7 +174,7 @@ class FakeSettingsRepository : SettingsRepository {
 class FakeDriveController : DriveController {
     private val live = MutableStateFlow(PreviewData.liveState)
     override val state: StateFlow<LiveDriveState> = live
-    override suspend fun start(course: Course, mode: SignalMode, replayAsset: String?) = AppResult.Ok(PreviewData.session)
+    override suspend fun start(course: Course, mode: SignalMode, replayAsset: String?, liveStart: LiveStart) = AppResult.Ok(PreviewData.session)
     override suspend fun stop(): AppResult<DriveSession?> = AppResult.Ok(PreviewData.session)
     override suspend fun replayAssets(courseId: String): List<String> = listOf("replay/demo_l2.json")
     override suspend fun demoCourseIds(): Set<String> = setOf(PreviewData.course.id)

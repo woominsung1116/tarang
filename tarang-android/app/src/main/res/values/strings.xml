@@ -38,7 +38,8 @@
     <string name="course_level_badge">%1$d단계 %2$s</string>
     <string name="course_source_saved">저장된 코스</string>
     <string name="course_demo_replay_available">시연 주행 가능</string>
-    <string name="course_far_from_start">지금 위치가 코스 출발점에서 %1$s 떨어져 있어요. 출발점까지는 내비 안내를 따라 가 주세요.</string>
+    <string name="drive_notice_far_from_start">코스 출발점에서 %1$s 떨어져 있어요. 출발점으로 이동해 주세요.</string>
+    <string name="drive_notice_navi_unconfirmed">내비가 아직 답하지 않았어요. 내비 화면에 코스가 떴는지 확인해 주세요.</string>
     <string name="course_locked_notice">아직 잠긴 단계예요. 코스를 둘러보고 시연 주행만 할 수 있어요. 앞 단계를 끝내면 실차로 달릴 수 있어요.</string>
     <string name="home_level_locked_notice">아직 잠긴 단계예요 — 둘러보기와 시연 주행만 할 수 있어요.</string>
     <string name="level_tab_a11y">%1$d단계 %2$s 코스 보기</string>

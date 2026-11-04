@@ -9,7 +9,7 @@ import com.taraang.app.core.userMessage
 import com.taraang.app.di.AppContainer
 import com.taraang.app.domain.model.Course
 import com.taraang.app.domain.model.SignalMode
-import com.taraang.app.domain.model.farFromStartM
+import com.taraang.app.domain.repository.LiveStart
 import com.taraang.app.ui.guard
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -43,12 +43,6 @@ data class CourseDetailUiState(
 
 sealed interface CourseDetailEvent {
     data object DriveStarted : CourseDetailEvent
-
-    /** 주행은 계속하되 짧게 알릴 문구(내비 응답 없음 등). 화면을 떠나도 보이게 토스트로 띄운다. */
-    data class Notice(val message: String) : CourseDetailEvent
-
-    /** 지금 위치가 코스 출발점에서 [distanceM]만큼 떨어져 있다. 주행은 그대로 시작한다. */
-    data class FarFromStart(val distanceM: Double) : CourseDetailEvent
 }
 
 class CourseDetailViewModel(
@@ -94,20 +88,21 @@ class CourseDetailViewModel(
         controller.prepareLiveStart()
         viewModelScope.launch {
             try {
-                when (val navi = container.navigationLauncher.startCourse(course.origin, course.waypoints, course.title)) {
-                    is AppResult.Ok -> course.farFromStartM(navi.value.currentPosition)?.let { _events.send(CourseDetailEvent.FarFromStart(it)) }
+                // 내비 응답 없음·출발점 거리 안내는 주행 화면이 보여 준다(내비가 앞에 있는 동안 토스트는 안 보인다).
+                val liveStart = when (val navi = container.navigationLauncher.startCourse(course.origin, course.waypoints, course.title)) {
+                    is AppResult.Ok -> LiveStart(positionHint = navi.value.currentPosition)
                     is AppResult.Err -> {
                         val error = navi.error
                         if (error is AppError.Navigation && error.unconfirmed) {
                             container.logger.w(TAG, "navi unconfirmed: ${error.debugMessage}")
-                            _events.send(CourseDetailEvent.Notice(error.userMessage()))
+                            LiveStart(naviUnconfirmed = true)
                         } else {
                             fail(error)
                             return@launch
                         }
                     }
                 }
-                startDrive(course, SignalMode.LIVE, null)
+                startDrive(course, SignalMode.LIVE, null, liveStart)
             } finally {
                 // 주행이 시작됐으면 아무 일도 안 한다. 실패·취소면 미리 켠 서비스를 내린다.
                 controller.cancelPreparedStart()
@@ -168,8 +163,8 @@ class CourseDetailViewModel(
             withContext(io) { container.driveController.replayAssets(course.id) }
         }.getOrNull().orEmpty()
 
-    private suspend fun startDrive(course: Course, mode: SignalMode, asset: String?) {
-        when (val result = container.driveController.start(course, mode, asset)) {
+    private suspend fun startDrive(course: Course, mode: SignalMode, asset: String?, liveStart: LiveStart = LiveStart()) {
+        when (val result = container.driveController.start(course, mode, asset, liveStart)) {
             is AppResult.Ok -> {
                 _state.update { it.copy(starting = null) }
                 _events.send(CourseDetailEvent.DriveStarted)

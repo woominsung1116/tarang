@@ -162,13 +162,13 @@ fun DriveScreen(state: DriveUiState, onEnd: () -> Unit) {
         BoxWithConstraints(Modifier.weight(1f).fillMaxWidth().padding(horizontal = 40.dp, vertical = 24.dp)) {
             if (maxWidth >= UiConfig.WideLayoutMinWidth) {
                 Row(Modifier.fillMaxSize(), verticalAlignment = Alignment.CenterVertically) {
-                    MessageArea(state.message, state.messageIsWarning, Modifier.weight(1.6f).fillMaxHeight())
+                    MessageArea(state.message, state.messageIsWarning, state.startNotice, Modifier.weight(1.6f).fillMaxHeight())
                     Spacer(Modifier.width(32.dp))
                     GuidancePanel(state, Modifier.weight(1f).height(360.dp))
                 }
             } else {
                 Column(Modifier.fillMaxSize()) {
-                    MessageArea(state.message, state.messageIsWarning, Modifier.weight(1f).fillMaxWidth())
+                    MessageArea(state.message, state.messageIsWarning, state.startNotice, Modifier.weight(1f).fillMaxWidth())
                     Spacer(Modifier.height(24.dp))
                     GuidancePanel(state, Modifier.fillMaxWidth().height(300.dp))
                 }
@@ -182,10 +182,15 @@ fun DriveScreen(state: DriveUiState, onEnd: () -> Unit) {
  * 메시지 자리 하나: 새 경고가 켜져 있으면 경고(빨강 + 경고 아이콘, 색만으로 알리지 않는다), 아니면 최근 피드백, 둘 다 없으면 기본 문장.
  */
 @Composable
-private fun MessageArea(message: String?, warning: Boolean, modifier: Modifier) {
+private fun MessageArea(message: String?, warning: Boolean, startNotice: StartNotice?, modifier: Modifier) {
+    val notice = when (startNotice) {
+        is StartNotice.FarFromStart -> stringResource(R.string.drive_notice_far_from_start, Format.distance(startNotice.distanceM))
+        StartNotice.NaviUnconfirmed -> stringResource(R.string.drive_notice_navi_unconfirmed)
+        null -> null
+    }
     Box(modifier, contentAlignment = Alignment.CenterStart) {
         AnimatedContent(
-            targetState = message to warning,
+            targetState = (message ?: notice) to warning,
             transitionSpec = { fadeIn() togetherWith fadeOut() },
             label = "feedback",
         ) { (text, isWarning) ->

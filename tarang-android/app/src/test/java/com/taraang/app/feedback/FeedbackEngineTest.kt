@@ -21,6 +21,9 @@ import com.taraang.app.domain.signal.TurnSignalState
 import com.taraang.app.domain.signal.VehicleSnapshot
 import com.taraang.app.domain.signal.WarningType
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
@@ -42,6 +45,7 @@ private class Harness(
     val events = mutableListOf<DriveEvent>()
     var lastSpeed: Double? = null
     var newWarnings: Set<WarningType> = emptySet()
+    var lastResult: TickResult? = null
 
     fun run(ms: Long, tickMs: Long = 250, each: Harness.() -> Unit = {}) {
         repeat((ms / tickMs).toInt()) {
@@ -55,6 +59,7 @@ private class Harness(
             events += r.events
             lastSpeed = r.speedKmh
             newWarnings = r.newWarnings
+            lastResult = r
         }
     }
 
@@ -533,6 +538,35 @@ class FeedbackEngineTest {
         assertEquals(1, h.recorded(DriveEventType.OFF_COURSE).size)
         h.run(8_000) { navi = navi.copy(nextTurn = NextTurn(TurnKind.RIGHT, (80 - (traveledM - 150)).coerceAtLeast(0.0))) }
         assertTrue(h.recorded(DriveEventType.TURN_SIGNAL_MISSED).isEmpty())
+    }
+
+    @Test
+    fun `a drive that never reached the course is not off course, it reports the distance to the start`() {
+        val h = Harness()
+        h.position = START.east(374_000.0) // 에뮬레이터: 374km 떨어진 곳
+        h.kmh = 36.0
+        h.heading = 0.0 to 1.0
+        h.run(30_000)
+        assertTrue(h.recorded(DriveEventType.OFF_COURSE).isEmpty())
+        assertTrue(h.lastResult!!.farFromStartM!! > 370_000.0)
+        assertFalse(h.lastResult!!.joinedCourse)
+    }
+
+    @Test
+    fun `the far-start distance clears once the car joins the course, off course counts only after that`() {
+        val h = Harness()
+        h.position = START.east(2_000.0)
+        h.kmh = 36.0
+        h.heading = 0.0 to -1.0 // 서쪽으로 출발점을 향해
+        h.run(250)
+        assertNotNull(h.lastResult!!.farFromStartM)
+        h.run(200_000) { if (position.lon <= START.lon) heading = 1.0 to 0.0 } // 출발점에 닿으면 코스(북쪽)로
+        assertTrue(h.lastResult!!.joinedCourse)
+        assertNull(h.lastResult!!.farFromStartM)
+        assertTrue(h.recorded(DriveEventType.OFF_COURSE).isEmpty())
+        h.heading = 0.0 to 1.0
+        h.run(15_000)
+        assertEquals(1, h.recorded(DriveEventType.OFF_COURSE).size)
     }
 
     // --- 이벤트 메타데이터 ---

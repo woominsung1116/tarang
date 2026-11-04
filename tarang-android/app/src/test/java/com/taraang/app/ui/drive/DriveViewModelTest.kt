@@ -44,6 +44,22 @@ class DriveViewModelTest {
     }
 
     @Test
+    fun `before joining the course the start notice fills the empty slot, below warnings and feedback`() {
+        controller.live.value = controller.live.value.copy(farFromStartM = 374_049.0, naviUnconfirmed = true)
+        assertEquals(StartNotice.FarFromStart(374_000), vm.state.value.startNotice) // 거리가 먼저
+        assertEquals(null, vm.state.value.message)
+
+        controller.live.value = controller.live.value.copy(farFromStartM = null)
+        assertEquals(StartNotice.NaviUnconfirmed, vm.state.value.startNotice)
+
+        emit(FeedbackType.NEW_WARNING, "엔진 경고가 켜졌어요.", 1, setOf(WarningType.ENGINE))
+        assertEquals("엔진 경고가 켜졌어요.", vm.state.value.message) // 화면은 message를 먼저 그린다
+
+        controller.live.value = controller.live.value.copy(joinedCourse = true)
+        assertEquals(null, vm.state.value.startNotice)
+    }
+
+    @Test
     fun `a warning that is already off when spoken is not shown`() {
         vm.state.value
         emit(FeedbackType.NEW_WARNING, "엔진 경고가 켜졌어요.", 1, emptySet())

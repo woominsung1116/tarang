@@ -9,9 +9,11 @@ import com.taraang.app.domain.model.Course
 import com.taraang.app.domain.model.DriveSession
 import com.taraang.app.domain.model.FeedbackSettings
 import com.taraang.app.domain.model.SignalMode
+import com.taraang.app.domain.model.farFromStartM
 import com.taraang.app.domain.repository.DriveController
 import com.taraang.app.domain.repository.DriveRepository
 import com.taraang.app.domain.repository.LiveDriveState
+import com.taraang.app.domain.repository.LiveStart
 import com.taraang.app.domain.repository.SettingsRepository
 import com.taraang.app.domain.signal.RouteStatus
 import com.taraang.app.domain.signal.SignalSource
@@ -133,10 +135,10 @@ class DriveControllerImpl(
         return (ReplayLogParser.parse(text) as? AppResult.Ok)?.value?.courseId
     }
 
-    override suspend fun start(course: Course, mode: SignalMode, replayAsset: String?): AppResult<DriveSession> = mutex.withLock {
+    override suspend fun start(course: Course, mode: SignalMode, replayAsset: String?, liveStart: LiveStart): AppResult<DriveSession> = mutex.withLock {
         if (!moveTo(DrivePhase.STARTING)) return AppResult.Err(AppError.InvalidInput("이미 주행 중(${_phase.value})"))
         // 신호 소스·세션은 중간에 끊기면 새어 나간다. 시작은 끝까지 하고, 그 사이 호출자가 취소됐으면 되돌린다.
-        val result = withContext(NonCancellable) { launchDrive(course, mode, replayAsset) }
+        val result = withContext(NonCancellable) { launchDrive(course, mode, replayAsset, liveStart) }
         if (!currentCoroutineContext().isActive) {
             withContext(NonCancellable) {
                 if (result is AppResult.Ok) finishActive(failed = true) else moveTo(DrivePhase.FAILED)
@@ -153,7 +155,7 @@ class DriveControllerImpl(
     override suspend fun stop(): AppResult<DriveSession?> = mutex.withLock { finishActive(failed = false) }
 
     /** STARTING 상태에서만 부른다. 실패하면 만든 자원을 모두 정리하고 Err를 돌려준다. */
-    private suspend fun launchDrive(course: Course, mode: SignalMode, replayAsset: String?): AppResult<DriveSession> {
+    private suspend fun launchDrive(course: Course, mode: SignalMode, replayAsset: String?, liveStart: LiveStart): AppResult<DriveSession> {
         val asset = if (mode == SignalMode.REPLAY) {
             // 다른 코스에서 녹화한 로그는 회전 판정·코스 이탈 기록을 틀리게 만든다. 이 코스 로그만 받는다.
             val matching = replayAssets(course.id)
@@ -198,7 +200,12 @@ class DriveControllerImpl(
             }
         }
         val engine = FeedbackEngine(session.id, course, settings, config)
-        _state.value = LiveDriveState(session = session, availability = source.availability.value)
+        _state.value = LiveDriveState(
+            session = session,
+            availability = source.availability.value,
+            farFromStartM = course.farFromStartM(liveStart.positionHint),
+            naviUnconfirmed = liveStart.naviUnconfirmed,
+        )
         val job = scope.launch { runLoop(session, source, engine, settings) }
         active = ActiveDrive(session, source, engine, job)
         moveTo(DrivePhase.RUNNING)
@@ -265,6 +272,9 @@ class DriveControllerImpl(
                         lastFeedback = message ?: it.lastFeedback,
                         eventCount = it.eventCount + result.events.size,
                         newWarnings = result.newWarnings,
+                        joinedCourse = result.joinedCourse,
+                        // 첫 위치가 오기 전에는 내비가 준 위치로 잰 값을 유지한다.
+                        farFromStartM = if (navi.position == null && !result.joinedCourse) it.farFromStartM else result.farFromStartM,
                     )
                 }
                 if (replayDone) break

@@ -15,6 +15,7 @@ import com.taraang.app.domain.model.LevelProgress
 import com.taraang.app.domain.model.SegmentFeeling
 import com.taraang.app.domain.model.SignalMode
 import com.taraang.app.domain.repository.DriveRepository
+import com.taraang.app.domain.repository.LiveStart
 import com.taraang.app.domain.repository.SettingsRepository
 import com.taraang.app.domain.signal.NaviSnapshot
 import com.taraang.app.domain.signal.SignalAvailability
@@ -195,6 +196,20 @@ class DriveControllerImplTest {
         failing.prepareLiveStart()
         assertTrue(failing.start(testCourse(), SignalMode.LIVE, null) is AppResult.Err)
         assertEquals(listOf("start", "stop", "start", "stop"), keep.calls)
+    }
+
+    @Test
+    fun `live start info reaches the drive state, the hint gives the far-start distance until positions arrive`() = runTest {
+        val c = controller()
+        val far = testCourse().origin.let { com.taraang.app.core.LatLng(it.lat + 0.05, it.lon) }
+        c.start(testCourse(), SignalMode.REPLAY, "demo.json", LiveStart(naviUnconfirmed = true, positionHint = far))
+        assertTrue(c.state.value.naviUnconfirmed)
+        assertTrue(c.state.value.farFromStartM!! > 5_000.0)
+        advanceTimeBy(2_000)
+        // 로그는 출발점에서 시작하므로 코스에 오르고 안내가 내려간다.
+        assertTrue(c.state.value.joinedCourse)
+        assertEquals(null, c.state.value.farFromStartM)
+        c.stop()
     }
 
     @Test

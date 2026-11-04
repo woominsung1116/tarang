@@ -1,6 +1,8 @@
 package com.taraang.app.feedback
 
 import com.taraang.app.domain.model.Course
+import com.taraang.app.domain.model.FAR_FROM_START_M
+import com.taraang.app.domain.model.farFromStartM
 import com.taraang.app.domain.model.DriveEvent
 import com.taraang.app.domain.model.DriveEventType
 import com.taraang.app.domain.model.FeedbackMessage
@@ -28,6 +30,10 @@ data class TickResult(
     val speedKmh: Double?,
     /** 주행 중 새로 켜졌고 아직 켜져 있는 경고. 화면 경고 표시의 단일 출처(비면 경고 표시를 내린다). */
     val newWarnings: Set<WarningType> = emptySet(),
+    /** 코스 선에 한 번이라도 올라왔는가. 그 전에는 코스 이탈을 세지 않는다. */
+    val joinedCourse: Boolean = false,
+    /** 아직 코스에 오르지 않았고 출발점에서 [FAR_FROM_START_M]보다 멀면 출발점까지 직선거리. 아니면 null. */
+    val farFromStartM: Double? = null,
 )
 
 /**
@@ -37,7 +43,7 @@ data class TickResult(
  */
 class FeedbackEngine(
     private val sessionId: String,
-    course: Course,
+    private val course: Course,
     private val settings: FeedbackSettings,
     private val config: FeedbackConfig = FeedbackConfig(),
 ) {
@@ -122,6 +128,8 @@ class FeedbackEngine(
             events = drafted,
             speedKmh = speed,
             newWarnings = newWarnings,
+            joinedCourse = offCourseDetector.joined,
+            farFromStartM = if (offCourseDetector.joined) null else course.farFromStartM(position),
         )
     }
 

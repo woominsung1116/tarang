@@ -188,6 +188,8 @@ object SchoolZone {
 
 /**
  * 코스 선에서 일정 거리 이상 일정 시간 벗어나면 이탈로 본다. 이탈 중에는 회전 판정을 멈춘다(오탐 방지).
+ * 이탈은 코스에 한 번 올라온 뒤([joined])에만 센다. 아직 코스에 닿지 않은 주행(출발점에서 먼 곳에서 켬)은
+ * "이탈"이 아니라 "아직 코스 밖"이다.
  */
 class OffCourseDetector(private val path: CoursePath, private val config: FeedbackConfig = FeedbackConfig()) {
 
@@ -195,10 +197,15 @@ class OffCourseDetector(private val path: CoursePath, private val config: Feedba
     var offCourse: Boolean = false
         private set
 
+    /** 코스 선 [FeedbackConfig.offCourseM] 안에 한 번이라도 들어왔는가. */
+    var joined: Boolean = false
+        private set
+
     /** 이탈이 새로 확정된 순간에만 true. */
     fun update(position: LatLng?, nowMs: Long): Boolean {
         val offset = if (position != null && path.isUsable) path.project(position)?.offsetM else null
-        if (offset == null || offset <= config.offCourseM) {
+        if (offset != null && offset <= config.offCourseM) joined = true
+        if (offset == null || offset <= config.offCourseM || !joined) {
             farSince = null
             offCourse = false
             return false

@@ -47,6 +47,8 @@ data class DriveUiState(
     val message: String? = null,
     /** [message]가 차량 경고 문장인가(빨강 + 경고 아이콘으로 그린다). */
     val messageIsWarning: Boolean = false,
+    /** 메시지 자리가 비었을 때 보여 줄 출발 안내. 코스에 오르면 null. */
+    val startNotice: StartNotice? = null,
     val turnKind: TurnKind? = null,
     /** [UiConfig.TURN_DISTANCE_STEP_M] 단위로 반올림한 거리. 잘못된 값이면 null. */
     val turnDistanceM: Int? = null,
@@ -58,6 +60,13 @@ data class DriveUiState(
 ) {
     val anyUnavailable: Boolean
         get() = listOf(turnSignalDisplay, brakeDisplay, warningDisplay).any { it == SignalDisplay.UNAVAILABLE }
+}
+
+/** 코스에 오르기 전 출발 안내. 경고·피드백보다 낮고 기본 문장보다 높다. */
+sealed interface StartNotice {
+    /** [distanceM]: 100m 단위로 반올림(틱마다 화면이 다시 그려지지 않게). */
+    data class FarFromStart(val distanceM: Int) : StartNotice
+    data object NaviUnconfirmed : StartNotice
 }
 
 sealed interface DriveEvent {
@@ -141,7 +150,10 @@ class DriveViewModel(private val container: AppContainer) : ViewModel() {
     companion object {
         private const val TAG = "DriveVM"
 
-        /** 화면 상태는 한 가지만: 새 경고가 켜져 있는 동안 메시지 자리는 경고가 차지한다(코칭은 음성으로만). */
+        /**
+         * 화면 상태는 한 가지만. 메시지 자리 순서: 새 경고 > 최근 피드백 > 출발 안내(코스에 오르기 전) > 기본 문장.
+         * 새 경고가 켜져 있는 동안 코칭은 음성으로만 나간다.
+         */
         internal fun toUiState(live: LiveDriveState, local: Local): DriveUiState {
             val status = live.availability.status
             fun available(key: SignalKey) = status[key] == SignalStatus.AVAILABLE
@@ -152,6 +164,12 @@ class DriveViewModel(private val container: AppContainer) : ViewModel() {
                 errorMessage = local.errorMessage,
                 message = local.warningText ?: local.message,
                 messageIsWarning = local.warningText != null,
+                startNotice = when {
+                    live.joinedCourse -> null
+                    live.farFromStartM != null -> StartNotice.FarFromStart((live.farFromStartM / 100).roundToInt() * 100)
+                    live.naviUnconfirmed -> StartNotice.NaviUnconfirmed
+                    else -> null
+                },
                 turnKind = turn?.kind,
                 turnDistanceM = turn?.distanceM?.let(::roundDistance),
                 speedLimitKmh = live.navi.speedLimitKmh?.takeIf { it in 1..200 },

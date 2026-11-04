@@ -364,6 +364,7 @@ def run(course: dict, frames: list[dict], enabled: frozenset[str] = DEFAULT_ENAB
     brake_spoken = False
     far_since = None
     off_course = False
+    joined = False
 
     last_spoken = None
     last_by_type: dict[str, int] = {}
@@ -376,9 +377,11 @@ def run(course: dict, frames: list[dict], enabled: frozenset[str] = DEFAULT_ENAB
         quick = speed_est.current_short(now)
         turn = turns.update(f["nextTurn"], pos, now)
 
-        # OffCourseDetector
+        # OffCourseDetector: 코스에 한 번 올라온 뒤에만 이탈을 센다(그 전은 "아직 코스 밖")
         proj = path.project(pos) if path.usable else None
-        if proj is None or proj[0] <= OFF_COURSE_M:
+        if proj is not None and proj[0] <= OFF_COURSE_M:
+            joined = True
+        if proj is None or proj[0] <= OFF_COURSE_M or not joined:
             far_since, off_course = None, False
         else:
             far_since = now if far_since is None else far_since

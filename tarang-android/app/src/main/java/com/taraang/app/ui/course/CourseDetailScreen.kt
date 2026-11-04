@@ -1,6 +1,5 @@
 package com.taraang.app.ui.course
 
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -35,7 +34,6 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -76,18 +74,10 @@ fun CourseDetailDestination(onBack: () -> Unit, onDriveStarted: () -> Unit) {
     val vm = containerViewModel { c, h -> CourseDetailViewModel(c, h.toRoute<CourseDetailRoute>().courseId) }
     val state by vm.state.collectAsStateWithLifecycle()
     val started by rememberUpdatedState(onDriveStarted)
-    val context = LocalContext.current
     LaunchedEffect(vm) {
         vm.events.collect { event ->
             when (event) {
                 CourseDetailEvent.DriveStarted -> started()
-                // 바로 주행 화면으로 넘어가므로 화면 상태 대신 토스트(화면 이동 뒤에도 남는다).
-                is CourseDetailEvent.Notice -> Toast.makeText(context, event.message, Toast.LENGTH_LONG).show()
-                is CourseDetailEvent.FarFromStart -> Toast.makeText(
-                    context,
-                    context.getString(R.string.course_far_from_start, Format.distance(event.distanceM)),
-                    Toast.LENGTH_LONG,
-                ).show()
             }
         }
     }
